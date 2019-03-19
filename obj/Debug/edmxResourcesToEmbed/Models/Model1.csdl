@@ -1,0 +1,523 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="socialModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Country">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Iso3" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="NumCode" Type="Int32" />
+    <Property Name="PhoneCode" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="friend">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="user_id" Type="Int32" />
+    <Property Name="friend_user_id" Type="Int32" />
+    <NavigationProperty Name="user" Relationship="Self.FK_friends_users" FromRole="friends" ToRole="users" />
+    <NavigationProperty Name="user1" Relationship="Self.FK_friends_users1" FromRole="friends" ToRole="users" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="country" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="age" Type="Int32" />
+    <Property Name="profile_photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="phone_number" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="gender" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="birthdate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="friends" Relationship="Self.FK_friends_users" FromRole="users" ToRole="friends" />
+    <NavigationProperty Name="friends1" Relationship="Self.FK_friends_users1" FromRole="users" ToRole="friends" />
+    <NavigationProperty Name="followers" Relationship="socialModel.FK_followers_users" FromRole="user" ToRole="follower" />
+    <NavigationProperty Name="followers1" Relationship="socialModel.FK_followers_users1" FromRole="user" ToRole="follower" />
+    <NavigationProperty Name="Profiles" Relationship="socialModel.FK_Profile_users" FromRole="user" ToRole="Profile" />
+    <NavigationProperty Name="messengers2" Relationship="socialModel.FK_messenger_users2" FromRole="user" ToRole="messenger1" />
+    <NavigationProperty Name="messengers11" Relationship="socialModel.FK_messenger_users11" FromRole="user" ToRole="messenger1" />
+    <NavigationProperty Name="comments" Relationship="socialModel.FK_comments_users" FromRole="user" ToRole="comment" />
+    <NavigationProperty Name="likes" Relationship="socialModel.FK_likes_users" FromRole="user" ToRole="like" />
+    <NavigationProperty Name="NewsFeeds" Relationship="socialModel.FK_NewsFeed_users" FromRole="user" ToRole="NewsFeed" />
+    <NavigationProperty Name="notifications" Relationship="socialModel.FK_notifications_users" FromRole="user" ToRole="notification" />
+    <NavigationProperty Name="notifications1" Relationship="socialModel.FK_notifications_users2" FromRole="user" ToRole="notification" />
+    <Property Name="back_photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ConfirmedEmail" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="intermediate_storage" Relationship="socialModel.FK_intermediate_storage_users" FromRole="user" ToRole="intermediate_storage" />
+    <Property Name="try_count" Type="Int32" />
+    <Property Name="block_time" Type="DateTime" Precision="7" />
+    <Property Name="stat" Type="Int32" />
+    <Property Name="inviter_id" Type="Int32" />
+    <Property Name="invited_by_me" Type="Int32" />
+    <NavigationProperty Name="users1" Relationship="socialModel.FK_users_users" FromRole="user" ToRole="user1" />
+    <NavigationProperty Name="user1" Relationship="socialModel.FK_users_users" FromRole="user1" ToRole="user" />
+    <Property Name="color" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="from_facebook" Type="Int32" />
+    <Property Name="is_blocked" Type="Int32" />
+  </EntityType>
+  <Association Name="FK_friends_users">
+    <End Role="users" Type="Self.user" Multiplicity="0..1" />
+    <End Role="friends" Type="Self.friend" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="friends">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_friends_users1">
+    <End Role="users" Type="Self.user" Multiplicity="0..1" />
+    <End Role="friends" Type="Self.friend" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="friends">
+        <PropertyRef Name="friend_user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="socialEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Countries" EntityType="Self.Country" />
+    <EntitySet Name="friends" EntityType="Self.friend" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="users" EntityType="Self.user" />
+    <AssociationSet Name="FK_friends_users" Association="Self.FK_friends_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="friends" EntitySet="friends" />
+    </AssociationSet>
+    <AssociationSet Name="FK_friends_users1" Association="Self.FK_friends_users1">
+      <End Role="users" EntitySet="users" />
+      <End Role="friends" EntitySet="friends" />
+    </AssociationSet>
+    <EntitySet Name="followers" EntityType="socialModel.follower" />
+    <EntitySet Name="NewsFeeds" EntityType="socialModel.NewsFeed" />
+    <EntitySet Name="Profiles" EntityType="socialModel.Profile" />
+    <AssociationSet Name="FK_followers_NewsFeed" Association="socialModel.FK_followers_NewsFeed">
+      <End Role="NewsFeed" EntitySet="NewsFeeds" />
+      <End Role="follower" EntitySet="followers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_followers_users" Association="socialModel.FK_followers_users">
+      <End Role="user" EntitySet="users" />
+      <End Role="follower" EntitySet="followers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_followers_users1" Association="socialModel.FK_followers_users1">
+      <End Role="user" EntitySet="users" />
+      <End Role="follower" EntitySet="followers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Profile_users" Association="socialModel.FK_Profile_users">
+      <End Role="user" EntitySet="users" />
+      <End Role="Profile" EntitySet="Profiles" />
+    </AssociationSet>
+    <EntitySet Name="messenger1" EntityType="socialModel.messenger1" />
+    <AssociationSet Name="FK_messenger_users2" Association="socialModel.FK_messenger_users2">
+      <End Role="user" EntitySet="users" />
+      <End Role="messenger1" EntitySet="messenger1" />
+    </AssociationSet>
+    <AssociationSet Name="FK_messenger_users11" Association="socialModel.FK_messenger_users11">
+      <End Role="user" EntitySet="users" />
+      <End Role="messenger1" EntitySet="messenger1" />
+    </AssociationSet>
+    <EntitySet Name="comments" EntityType="socialModel.comment" />
+    <EntitySet Name="likes" EntityType="socialModel.like" />
+    <AssociationSet Name="FK_comments_users" Association="socialModel.FK_comments_users">
+      <End Role="user" EntitySet="users" />
+      <End Role="comment" EntitySet="comments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_likes_users" Association="socialModel.FK_likes_users">
+      <End Role="user" EntitySet="users" />
+      <End Role="like" EntitySet="likes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NewsFeed_users" Association="socialModel.FK_NewsFeed_users">
+      <End Role="user" EntitySet="users" />
+      <End Role="NewsFeed" EntitySet="NewsFeeds" />
+    </AssociationSet>
+    <EntitySet Name="notifications" EntityType="socialModel.notification" />
+    <AssociationSet Name="FK_notifications_users" Association="socialModel.FK_notifications_users">
+      <End Role="user" EntitySet="users" />
+      <End Role="notification" EntitySet="notifications" />
+    </AssociationSet>
+    <AssociationSet Name="FK_notifications_users2" Association="socialModel.FK_notifications_users2">
+      <End Role="user" EntitySet="users" />
+      <End Role="notification" EntitySet="notifications" />
+    </AssociationSet>
+    <EntitySet Name="notification_text" EntityType="socialModel.notification_text" />
+    <AssociationSet Name="FK_notifications_notification_text1" Association="socialModel.FK_notifications_notification_text1">
+      <End Role="notification_text" EntitySet="notification_text" />
+      <End Role="notification" EntitySet="notifications" />
+    </AssociationSet>
+    <AssociationSet Name="FK_comments_NewsFeed" Association="socialModel.FK_comments_NewsFeed">
+      <End Role="NewsFeed" EntitySet="NewsFeeds" />
+      <End Role="comment" EntitySet="comments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_likes_NewsFeed" Association="socialModel.FK_likes_NewsFeed">
+      <End Role="NewsFeed" EntitySet="NewsFeeds" />
+      <End Role="like" EntitySet="likes" />
+    </AssociationSet>
+    <EntitySet Name="feedStates" EntityType="socialModel.feedState" />
+    <AssociationSet Name="FK_NewsFeed_feedStates" Association="socialModel.FK_NewsFeed_feedStates">
+      <End Role="feedState" EntitySet="feedStates" />
+      <End Role="NewsFeed" EntitySet="NewsFeeds" />
+    </AssociationSet>
+    <EntitySet Name="intermediate_storage" EntityType="socialModel.intermediate_storage" />
+    <AssociationSet Name="FK_intermediate_storage_users" Association="socialModel.FK_intermediate_storage_users">
+      <End Role="user" EntitySet="users" />
+      <End Role="intermediate_storage" EntitySet="intermediate_storage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_users_users" Association="socialModel.FK_users_users">
+      <End Role="user" EntitySet="users" />
+      <End Role="user1" EntitySet="users" />
+    </AssociationSet>
+    <EntitySet Name="adverts" EntityType="socialModel.advert" />
+  </EntityContainer>
+  <EntityType Name="follower">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="user_id" Type="Int32" />
+    <Property Name="follower_id" Type="Int32" />
+    <NavigationProperty Name="NewsFeed" Relationship="socialModel.FK_followers_NewsFeed" FromRole="follower" ToRole="NewsFeed" />
+    <NavigationProperty Name="user" Relationship="socialModel.FK_followers_users" FromRole="follower" ToRole="user" />
+    <NavigationProperty Name="user1" Relationship="socialModel.FK_followers_users1" FromRole="follower" ToRole="user" />
+  </EntityType>
+  <EntityType Name="NewsFeed">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="user_id" Type="Int32" />
+    <Property Name="contetnfeed" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="followers" Relationship="socialModel.FK_followers_NewsFeed" FromRole="NewsFeed" ToRole="follower" />
+    <Property Name="photos" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="videos" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="user" Relationship="socialModel.FK_NewsFeed_users" FromRole="NewsFeed" ToRole="user" />
+    <Property Name="dateTime" Type="DateTime" Precision="7" />
+    <NavigationProperty Name="comments" Relationship="socialModel.FK_comments_NewsFeed" FromRole="NewsFeed" ToRole="comment" />
+    <NavigationProperty Name="likes" Relationship="socialModel.FK_likes_NewsFeed" FromRole="NewsFeed" ToRole="like" />
+    <Property Name="feedState_id" Type="Int32" />
+    <Property Name="on_feed_id" Type="Int32" />
+    <NavigationProperty Name="feedState" Relationship="socialModel.FK_NewsFeed_feedStates" FromRole="NewsFeed" ToRole="feedState" />
+    <Property Name="url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Profile">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="user_id" Type="Int32" />
+    <Property Name="contentprof" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="allphoto_id" Type="Int32" />
+    <NavigationProperty Name="user" Relationship="socialModel.FK_Profile_users" FromRole="Profile" ToRole="user" />
+  </EntityType>
+  <Association Name="FK_followers_NewsFeed">
+    <End Type="socialModel.NewsFeed" Role="NewsFeed" Multiplicity="0..1" />
+    <End Type="socialModel.follower" Role="follower" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NewsFeed">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="follower">
+        <PropertyRef Name="follower_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_followers_users">
+    <End Type="socialModel.user" Role="user" Multiplicity="0..1" />
+    <End Type="socialModel.follower" Role="follower" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="follower">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_followers_users1">
+    <End Type="socialModel.user" Role="user" Multiplicity="0..1" />
+    <End Type="socialModel.follower" Role="follower" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="follower">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Profile_users">
+    <End Type="socialModel.user" Role="user" Multiplicity="0..1" />
+    <End Type="socialModel.Profile" Role="Profile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Profile">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="messenger1">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="from_user_id" Type="Int32" />
+    <Property Name="to_user_id" Type="Int32" />
+    <Property Name="message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="datetime" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="user" Relationship="socialModel.FK_messenger_users2" FromRole="messenger1" ToRole="user" />
+    <NavigationProperty Name="user1" Relationship="socialModel.FK_messenger_users11" FromRole="messenger1" ToRole="user" />
+    <Property Name="status" Type="Int32" />
+  </EntityType>
+  <Association Name="FK_messenger_users2">
+    <End Type="socialModel.user" Role="user" Multiplicity="0..1" />
+    <End Type="socialModel.messenger1" Role="messenger1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="messenger1">
+        <PropertyRef Name="from_user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_messenger_users11">
+    <End Type="socialModel.user" Role="user" Multiplicity="0..1" />
+    <End Type="socialModel.messenger1" Role="messenger1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="messenger1">
+        <PropertyRef Name="to_user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="comment">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="comment1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="commentator_id" Type="Int32" />
+    <NavigationProperty Name="user" Relationship="socialModel.FK_comments_users" FromRole="comment" ToRole="user" />
+    <Property Name="newsfeed_id" Type="Int32" />
+    <NavigationProperty Name="NewsFeed" Relationship="socialModel.FK_comments_NewsFeed" FromRole="comment" ToRole="NewsFeed" />
+    <Property Name="datetime" Type="DateTime" Precision="7" />
+  </EntityType>
+  <EntityType Name="like">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="liker_id" Type="Int32" />
+    <NavigationProperty Name="user" Relationship="socialModel.FK_likes_users" FromRole="like" ToRole="user" />
+    <Property Name="Newsfeed_id" Type="Int32" />
+    <NavigationProperty Name="NewsFeed" Relationship="socialModel.FK_likes_NewsFeed" FromRole="like" ToRole="NewsFeed" />
+  </EntityType>
+  <Association Name="FK_comments_users">
+    <End Type="socialModel.user" Role="user" Multiplicity="0..1" />
+    <End Type="socialModel.comment" Role="comment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="comment">
+        <PropertyRef Name="commentator_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_likes_users">
+    <End Type="socialModel.user" Role="user" Multiplicity="0..1" />
+    <End Type="socialModel.like" Role="like" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="like">
+        <PropertyRef Name="liker_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NewsFeed_users">
+    <End Type="socialModel.user" Role="user" Multiplicity="0..1" />
+    <End Type="socialModel.NewsFeed" Role="NewsFeed" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="NewsFeed">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="notification">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="user_id" Type="Int32" />
+    <Property Name="text_id" Type="Int32" />
+    <NavigationProperty Name="user" Relationship="socialModel.FK_notifications_users" FromRole="notification" ToRole="user" />
+    <Property Name="state" Type="Int32" />
+    <Property Name="datetime" Type="DateTime" Precision="7" />
+    <Property Name="sender_id" Type="Int32" />
+    <NavigationProperty Name="user1" Relationship="socialModel.FK_notifications_users2" FromRole="notification" ToRole="user" />
+    <NavigationProperty Name="notification_text" Relationship="socialModel.FK_notifications_notification_text1" FromRole="notification" ToRole="notification_text" />
+    <Property Name="on_feed_id" Type="Int32" />
+  </EntityType>
+  <Association Name="FK_notifications_users">
+    <End Type="socialModel.user" Role="user" Multiplicity="0..1" />
+    <End Type="socialModel.notification" Role="notification" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="notification">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_notifications_users2">
+    <End Type="socialModel.user" Role="user" Multiplicity="0..1" />
+    <End Type="socialModel.notification" Role="notification" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="notification">
+        <PropertyRef Name="sender_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="notification_text">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="notification_text1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="notifications" Relationship="socialModel.FK_notifications_notification_text1" FromRole="notification_text" ToRole="notification" />
+  </EntityType>
+  <Association Name="FK_notifications_notification_text1">
+    <End Type="socialModel.notification_text" Role="notification_text" Multiplicity="0..1" />
+    <End Type="socialModel.notification" Role="notification" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="notification_text">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="notification">
+        <PropertyRef Name="text_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_comments_NewsFeed">
+    <End Type="socialModel.NewsFeed" Role="NewsFeed" Multiplicity="0..1" />
+    <End Type="socialModel.comment" Role="comment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NewsFeed">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="comment">
+        <PropertyRef Name="newsfeed_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_likes_NewsFeed">
+    <End Type="socialModel.NewsFeed" Role="NewsFeed" Multiplicity="0..1" />
+    <End Type="socialModel.like" Role="like" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NewsFeed">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="like">
+        <PropertyRef Name="Newsfeed_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="feedState">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="state" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="NewsFeeds" Relationship="socialModel.FK_NewsFeed_feedStates" FromRole="feedState" ToRole="NewsFeed" />
+  </EntityType>
+  <Association Name="FK_NewsFeed_feedStates">
+    <End Type="socialModel.feedState" Role="feedState" Multiplicity="0..1" />
+    <End Type="socialModel.NewsFeed" Role="NewsFeed" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="feedState">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="NewsFeed">
+        <PropertyRef Name="feedState_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="intermediate_storage">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="user_id" Type="Int32" />
+    <NavigationProperty Name="user" Relationship="socialModel.FK_intermediate_storage_users" FromRole="intermediate_storage" ToRole="user" />
+    <Property Name="path" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_intermediate_storage_users">
+    <End Type="socialModel.user" Role="user" Multiplicity="0..1" />
+    <End Type="socialModel.intermediate_storage" Role="intermediate_storage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="intermediate_storage">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_users_users">
+    <End Type="socialModel.user" Role="user" Multiplicity="0..1" />
+    <End Type="socialModel.user" Role="user1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="user1">
+        <PropertyRef Name="inviter_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="advert">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="advert1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="status" Type="Int32" />
+    <Property Name="advNo" Type="Int32" />
+    <Property Name="cost" Type="Int32" />
+    <Property Name="datetime" Type="DateTime" Precision="3" />
+    <Property Name="url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+</Schema>

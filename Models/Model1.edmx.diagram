@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="54acb38123014c6aa313dd4328ac941e" Name="Diagram1" ZoomLevel="87">
+        <EntityTypeShape EntityType="socialModel.Country" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="socialModel.friend" Width="1.5" PointX="3" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="socialModel.sysdiagram" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="socialModel.user" Width="1.5" PointX="12" PointY="3" IsExpanded="true" />
+        <AssociationConnector Association="socialModel.FK_friends_users" ManuallyRouted="false" />
+        <AssociationConnector Association="socialModel.FK_friends_users1" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="socialModel.follower" Width="2.375" PointX="6" PointY="7.625" />
+        <EntityTypeShape EntityType="socialModel.NewsFeed" Width="1.5" PointX="9.625" PointY="8.375" />
+        <EntityTypeShape EntityType="socialModel.Profile" Width="1.5" PointX="3.125" PointY="8.25" />
+        <AssociationConnector Association="socialModel.FK_followers_NewsFeed" />
+        <AssociationConnector Association="socialModel.FK_followers_users" />
+        <AssociationConnector Association="socialModel.FK_followers_users1" />
+        <AssociationConnector Association="socialModel.FK_Profile_users" />
+        <EntityTypeShape EntityType="socialModel.messenger1" Width="1.5" PointX="2.875" PointY="11" />
+        <AssociationConnector Association="socialModel.FK_messenger_users2" />
+        <AssociationConnector Association="socialModel.FK_messenger_users11" />
+        <EntityTypeShape EntityType="socialModel.comment" Width="1.5" PointX="8.25" PointY="3.625" />
+        <EntityTypeShape EntityType="socialModel.like" Width="1.5" PointX="8.25" PointY="0.75" />
+        <AssociationConnector Association="socialModel.FK_comments_users" />
+        <AssociationConnector Association="socialModel.FK_likes_users" />
+        <AssociationConnector Association="socialModel.FK_NewsFeed_users" />
+        <EntityTypeShape EntityType="socialModel.notification" Width="1.5" PointX="14.25" PointY="4.875" />
+        <AssociationConnector Association="socialModel.FK_notifications_users" />
+        <AssociationConnector Association="socialModel.FK_notifications_users2" />
+        <EntityTypeShape EntityType="socialModel.notification_text" Width="1.5" PointX="5.375" PointY="10.875" />
+        <AssociationConnector Association="socialModel.FK_notifications_notification_text1" />
+        <AssociationConnector Association="socialModel.FK_comments_NewsFeed" />
+        <AssociationConnector Association="socialModel.FK_likes_NewsFeed" />
+        <EntityTypeShape EntityType="socialModel.feedState" Width="1.5" PointX="0.75" PointY="0.875" />
+        <AssociationConnector Association="socialModel.FK_NewsFeed_feedStates" />
+        <EntityTypeShape EntityType="socialModel.intermediate_storage" Width="1.5" PointX="0.75" PointY="6.75" />
+        <AssociationConnector Association="socialModel.FK_intermediate_storage_users" />
+        <AssociationConnector Association="socialModel.FK_users_users" />
+        <EntityTypeShape EntityType="socialModel.advert" Width="1.5" PointX="12.375" PointY="11.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

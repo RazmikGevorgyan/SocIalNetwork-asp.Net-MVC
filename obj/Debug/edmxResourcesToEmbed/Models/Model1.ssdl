@@ -1,0 +1,469 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="socialModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="advert">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="advert" Type="nvarchar(max)" />
+    <Property Name="status" Type="int" />
+    <Property Name="advNo" Type="int" />
+    <Property Name="cost" Type="int" />
+    <Property Name="datetime" Type="datetime" />
+    <Property Name="url" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="comments">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="datetime" Type="datetime2" Precision="7" />
+    <Property Name="newsfeed_id" Type="int" />
+    <Property Name="comment" Type="nvarchar(max)" />
+    <Property Name="commentator_id" Type="int" />
+  </EntityType>
+  <EntityType Name="Countries">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="80" Nullable="false" />
+    <Property Name="Iso3" Type="varchar" MaxLength="3" />
+    <Property Name="NumCode" Type="int" />
+    <Property Name="PhoneCode" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="feedStates">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="state" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="followers">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="user_id" Type="int" />
+    <Property Name="follower_id" Type="int" />
+  </EntityType>
+  <EntityType Name="friends">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="user_id" Type="int" />
+    <Property Name="friend_user_id" Type="int" />
+  </EntityType>
+  <EntityType Name="intermediate_storage">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" Nullable="false" />
+    <Property Name="user_id" Type="int" />
+    <Property Name="path" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="likes">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Newsfeed_id" Type="int" />
+    <Property Name="liker_id" Type="int" />
+  </EntityType>
+  <EntityType Name="messenger">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="from_user_id" Type="int" />
+    <Property Name="to_user_id" Type="int" />
+    <Property Name="message" Type="nvarchar(max)" />
+    <Property Name="status" Type="int" />
+    <Property Name="datetime" Type="date" />
+  </EntityType>
+  <EntityType Name="NewsFeed">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="user_id" Type="int" />
+    <Property Name="photos" Type="nvarchar(max)" />
+    <Property Name="contetnfeed" Type="nvarchar(max)" />
+    <Property Name="videos" Type="nvarchar(max)" />
+    <Property Name="dateTime" Type="datetime2" Precision="7" />
+    <Property Name="feedState_id" Type="int" />
+    <Property Name="on_feed_id" Type="int" />
+    <Property Name="url" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="notification_text">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="notification_text" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="notifications">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="user_id" Type="int" />
+    <Property Name="state" Type="int" />
+    <Property Name="text_id" Type="int" />
+    <Property Name="datetime" Type="datetime2" Precision="7" />
+    <Property Name="sender_id" Type="int" />
+    <Property Name="on_feed_id" Type="int" />
+  </EntityType>
+  <EntityType Name="Profile">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="user_id" Type="int" />
+    <Property Name="contentprof" Type="nchar" MaxLength="10" />
+    <Property Name="allphoto_id" Type="int" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="users">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" />
+    <Property Name="surname" Type="nvarchar" MaxLength="50" />
+    <Property Name="login" Type="nvarchar" MaxLength="50" />
+    <Property Name="email" Type="nvarchar(max)" />
+    <Property Name="country" Type="nvarchar(max)" />
+    <Property Name="password" Type="nvarchar(max)" />
+    <Property Name="age" Type="int" />
+    <Property Name="profile_photo" Type="nvarchar(max)" />
+    <Property Name="phone_number" Type="nvarchar" MaxLength="50" />
+    <Property Name="gender" Type="nchar" MaxLength="10" />
+    <Property Name="birthdate" Type="datetime" />
+    <Property Name="back_photo" Type="nvarchar(max)" />
+    <Property Name="ConfirmedEmail" Type="nchar" MaxLength="10" />
+    <Property Name="try_count" Type="int" />
+    <Property Name="block_time" Type="datetime2" Precision="7" />
+    <Property Name="stat" Type="int" />
+    <Property Name="inviter_id" Type="int" />
+    <Property Name="invited_by_me" Type="int" />
+    <Property Name="color" Type="nvarchar" MaxLength="50" />
+    <Property Name="from_facebook" Type="int" />
+    <Property Name="is_blocked" Type="int" />
+  </EntityType>
+  <Association Name="FK_comments_NewsFeed">
+    <End Role="NewsFeed" Type="Self.NewsFeed" Multiplicity="0..1" />
+    <End Role="comments" Type="Self.comments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NewsFeed">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="comments">
+        <PropertyRef Name="newsfeed_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_comments_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="comments" Type="Self.comments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="comments">
+        <PropertyRef Name="commentator_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_followers_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="followers" Type="Self.followers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="followers">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_followers_users1">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="followers" Type="Self.followers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="followers">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_friends_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="friends" Type="Self.friends" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="friends">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_friends_users1">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="friends" Type="Self.friends" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="friends">
+        <PropertyRef Name="friend_user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_intermediate_storage_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="intermediate_storage" Type="Self.intermediate_storage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="intermediate_storage">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_likes_NewsFeed">
+    <End Role="NewsFeed" Type="Self.NewsFeed" Multiplicity="0..1" />
+    <End Role="likes" Type="Self.likes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NewsFeed">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="likes">
+        <PropertyRef Name="Newsfeed_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_likes_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="likes" Type="Self.likes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="likes">
+        <PropertyRef Name="liker_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_messenger_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="messenger" Type="Self.messenger" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="messenger">
+        <PropertyRef Name="from_user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_messenger_users1">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="messenger" Type="Self.messenger" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="messenger">
+        <PropertyRef Name="to_user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NewsFeed_feedStates">
+    <End Role="feedStates" Type="Self.feedStates" Multiplicity="0..1" />
+    <End Role="NewsFeed" Type="Self.NewsFeed" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="feedStates">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="NewsFeed">
+        <PropertyRef Name="feedState_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NewsFeed_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="NewsFeed" Type="Self.NewsFeed" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="NewsFeed">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_notifications_notification_text1">
+    <End Role="notification_text" Type="Self.notification_text" Multiplicity="0..1" />
+    <End Role="notifications" Type="Self.notifications" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="notification_text">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="notifications">
+        <PropertyRef Name="text_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_notifications_users1">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="notifications" Type="Self.notifications" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="notifications">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_notifications_users2">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="notifications" Type="Self.notifications" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="notifications">
+        <PropertyRef Name="sender_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Profile_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="Profile" Type="Self.Profile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Profile">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_users_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="users1" Type="Self.users" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="users1">
+        <PropertyRef Name="inviter_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="socialModelStoreContainer">
+    <EntitySet Name="advert" EntityType="Self.advert" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="comments" EntityType="Self.comments" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Countries" EntityType="Self.Countries" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="feedStates" EntityType="Self.feedStates" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="followers" EntityType="Self.followers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="friends" EntityType="Self.friends" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="intermediate_storage" EntityType="Self.intermediate_storage" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="likes" EntityType="Self.likes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="messenger" EntityType="Self.messenger" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NewsFeed" EntityType="Self.NewsFeed" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="notification_text" EntityType="Self.notification_text" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="notifications" EntityType="Self.notifications" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Profile" EntityType="Self.Profile" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_comments_NewsFeed" Association="Self.FK_comments_NewsFeed">
+      <End Role="NewsFeed" EntitySet="NewsFeed" />
+      <End Role="comments" EntitySet="comments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_comments_users" Association="Self.FK_comments_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="comments" EntitySet="comments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_followers_users" Association="Self.FK_followers_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="followers" EntitySet="followers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_followers_users1" Association="Self.FK_followers_users1">
+      <End Role="users" EntitySet="users" />
+      <End Role="followers" EntitySet="followers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_friends_users" Association="Self.FK_friends_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="friends" EntitySet="friends" />
+    </AssociationSet>
+    <AssociationSet Name="FK_friends_users1" Association="Self.FK_friends_users1">
+      <End Role="users" EntitySet="users" />
+      <End Role="friends" EntitySet="friends" />
+    </AssociationSet>
+    <AssociationSet Name="FK_intermediate_storage_users" Association="Self.FK_intermediate_storage_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="intermediate_storage" EntitySet="intermediate_storage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_likes_NewsFeed" Association="Self.FK_likes_NewsFeed">
+      <End Role="NewsFeed" EntitySet="NewsFeed" />
+      <End Role="likes" EntitySet="likes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_likes_users" Association="Self.FK_likes_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="likes" EntitySet="likes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_messenger_users" Association="Self.FK_messenger_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="messenger" EntitySet="messenger" />
+    </AssociationSet>
+    <AssociationSet Name="FK_messenger_users1" Association="Self.FK_messenger_users1">
+      <End Role="users" EntitySet="users" />
+      <End Role="messenger" EntitySet="messenger" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NewsFeed_feedStates" Association="Self.FK_NewsFeed_feedStates">
+      <End Role="feedStates" EntitySet="feedStates" />
+      <End Role="NewsFeed" EntitySet="NewsFeed" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NewsFeed_users" Association="Self.FK_NewsFeed_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="NewsFeed" EntitySet="NewsFeed" />
+    </AssociationSet>
+    <AssociationSet Name="FK_notifications_notification_text1" Association="Self.FK_notifications_notification_text1">
+      <End Role="notification_text" EntitySet="notification_text" />
+      <End Role="notifications" EntitySet="notifications" />
+    </AssociationSet>
+    <AssociationSet Name="FK_notifications_users1" Association="Self.FK_notifications_users1">
+      <End Role="users" EntitySet="users" />
+      <End Role="notifications" EntitySet="notifications" />
+    </AssociationSet>
+    <AssociationSet Name="FK_notifications_users2" Association="Self.FK_notifications_users2">
+      <End Role="users" EntitySet="users" />
+      <End Role="notifications" EntitySet="notifications" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Profile_users" Association="Self.FK_Profile_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="Profile" EntitySet="Profile" />
+    </AssociationSet>
+    <AssociationSet Name="FK_users_users" Association="Self.FK_users_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="users1" EntitySet="users" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

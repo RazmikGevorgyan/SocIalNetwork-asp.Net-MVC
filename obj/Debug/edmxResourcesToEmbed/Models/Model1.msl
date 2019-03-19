@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="socialModelStoreContainer" CdmEntityContainer="socialEntities">
+    <EntitySetMapping Name="Countries">
+      <EntityTypeMapping TypeName="IsTypeOf(socialModel.Country)">
+        <MappingFragment StoreEntitySet="Countries">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Iso3" ColumnName="Iso3" />
+          <ScalarProperty Name="NumCode" ColumnName="NumCode" />
+          <ScalarProperty Name="PhoneCode" ColumnName="PhoneCode" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="friends">
+      <EntityTypeMapping TypeName="IsTypeOf(socialModel.friend)">
+        <MappingFragment StoreEntitySet="friends">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="friend_user_id" ColumnName="friend_user_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="IsTypeOf(socialModel.sysdiagram)">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="users">
+      <EntityTypeMapping TypeName="IsTypeOf(socialModel.user)">
+        <MappingFragment StoreEntitySet="users">
+          <ScalarProperty Name="is_blocked" ColumnName="is_blocked" />
+          <ScalarProperty Name="from_facebook" ColumnName="from_facebook" />
+          <ScalarProperty Name="color" ColumnName="color" />
+          <ScalarProperty Name="invited_by_me" ColumnName="invited_by_me" />
+          <ScalarProperty Name="inviter_id" ColumnName="inviter_id" />
+          <ScalarProperty Name="stat" ColumnName="stat" />
+          <ScalarProperty Name="block_time" ColumnName="block_time" />
+          <ScalarProperty Name="try_count" ColumnName="try_count" />
+          <ScalarProperty Name="ConfirmedEmail" ColumnName="ConfirmedEmail" />
+          <ScalarProperty Name="back_photo" ColumnName="back_photo" />
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="surname" ColumnName="surname" />
+          <ScalarProperty Name="login" ColumnName="login" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="country" ColumnName="country" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="age" ColumnName="age" />
+          <ScalarProperty Name="profile_photo" ColumnName="profile_photo" />
+          <ScalarProperty Name="phone_number" ColumnName="phone_number" />
+          <ScalarProperty Name="gender" ColumnName="gender" />
+          <ScalarProperty Name="birthdate" ColumnName="birthdate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="followers">
+      <EntityTypeMapping TypeName="socialModel.follower">
+        <MappingFragment StoreEntitySet="followers">
+          <ScalarProperty Name="follower_id" ColumnName="follower_id" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NewsFeeds">
+      <EntityTypeMapping TypeName="socialModel.NewsFeed">
+        <MappingFragment StoreEntitySet="NewsFeed">
+          <ScalarProperty Name="url" ColumnName="url" />
+          <ScalarProperty Name="on_feed_id" ColumnName="on_feed_id" />
+          <ScalarProperty Name="feedState_id" ColumnName="feedState_id" />
+          <ScalarProperty Name="dateTime" ColumnName="dateTime" />
+          <ScalarProperty Name="videos" ColumnName="videos" />
+          <ScalarProperty Name="photos" ColumnName="photos" />
+          <ScalarProperty Name="contetnfeed" ColumnName="contetnfeed" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Profiles">
+      <EntityTypeMapping TypeName="socialModel.Profile">
+        <MappingFragment StoreEntitySet="Profile">
+          <ScalarProperty Name="allphoto_id" ColumnName="allphoto_id" />
+          <ScalarProperty Name="contentprof" ColumnName="contentprof" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="messenger1">
+      <EntityTypeMapping TypeName="socialModel.messenger1">
+        <MappingFragment StoreEntitySet="messenger">
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="datetime" ColumnName="datetime" />
+          <ScalarProperty Name="message" ColumnName="message" />
+          <ScalarProperty Name="to_user_id" ColumnName="to_user_id" />
+          <ScalarProperty Name="from_user_id" ColumnName="from_user_id" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="comments">
+      <EntityTypeMapping TypeName="socialModel.comment">
+        <MappingFragment StoreEntitySet="comments">
+          <ScalarProperty Name="datetime" ColumnName="datetime" />
+          <ScalarProperty Name="newsfeed_id" ColumnName="newsfeed_id" />
+          <ScalarProperty Name="commentator_id" ColumnName="commentator_id" />
+          <ScalarProperty Name="comment1" ColumnName="comment" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="likes">
+      <EntityTypeMapping TypeName="socialModel.like">
+        <MappingFragment StoreEntitySet="likes">
+          <ScalarProperty Name="Newsfeed_id" ColumnName="Newsfeed_id" />
+          <ScalarProperty Name="liker_id" ColumnName="liker_id" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="notifications">
+      <EntityTypeMapping TypeName="socialModel.notification">
+        <MappingFragment StoreEntitySet="notifications">
+          <ScalarProperty Name="on_feed_id" ColumnName="on_feed_id" />
+          <ScalarProperty Name="sender_id" ColumnName="sender_id" />
+          <ScalarProperty Name="datetime" ColumnName="datetime" />
+          <ScalarProperty Name="state" ColumnName="state" />
+          <ScalarProperty Name="text_id" ColumnName="text_id" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="notification_text">
+      <EntityTypeMapping TypeName="socialModel.notification_text">
+        <MappingFragment StoreEntitySet="notification_text">
+          <ScalarProperty Name="notification_text1" ColumnName="notification_text" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="feedStates">
+      <EntityTypeMapping TypeName="socialModel.feedState">
+        <MappingFragment StoreEntitySet="feedStates">
+          <ScalarProperty Name="state" ColumnName="state" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="intermediate_storage">
+      <EntityTypeMapping TypeName="socialModel.intermediate_storage">
+        <MappingFragment StoreEntitySet="intermediate_storage">
+          <ScalarProperty Name="path" ColumnName="path" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="adverts">
+      <EntityTypeMapping TypeName="socialModel.advert">
+        <MappingFragment StoreEntitySet="advert">
+          <ScalarProperty Name="url" ColumnName="url" />
+          <ScalarProperty Name="datetime" ColumnName="datetime" />
+          <ScalarProperty Name="cost" ColumnName="cost" />
+          <ScalarProperty Name="advNo" ColumnName="advNo" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="advert1" ColumnName="advert" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

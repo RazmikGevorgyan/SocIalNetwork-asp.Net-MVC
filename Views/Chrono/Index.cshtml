@@ -1,0 +1,688 @@
+﻿<style>
+ .input-hidden {
+  position: absolute;
+  left: -9999px;
+}
+
+input[type=radio]:checked + label>img {
+  border: 1px solid #fff;
+  box-shadow: 0 0 3px 3px #090;
+}
+
+input[type=radio] + label>img {
+  border: 1px dashed #444;
+  width: 150px;
+  height: 150px;
+  transition: 500ms all;
+}
+
+input[type=radio]:checked + label>img {
+  transform: 
+    rotateZ(-10deg) 
+    rotateX(10deg);
+}
+    .card-img-top:hover {
+       opacity:0.5;
+       transition:1.5s;
+       color:rgba(33, 199, 245,0.4);
+    }
+    #cover-photo {
+     width: 100%;
+     height: 400px;
+     background-size: 100% 100%;
+    }
+</style>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Soc.Models.friend> specFriend=null;
+    List<Soc.Models.follower> folowers;
+    List<Soc.Models.follower> specFolowers=null;
+    List<Soc.Models.friend> friends;
+    List<Soc.Models.like> likes=ViewBag.likes as List<Soc.Models.like>;
+    List<Soc.Models.NewsFeed> newsfeed = ViewBag.allfeed as List<Soc.Models.NewsFeed>;
+    List<Soc.Models.notification> specNotif=null;
+    Soc.Models.user user = ViewBag.currentuser as Soc.Models.user;
+    List<Soc.Models.like> isliked = new List<Soc.Models.like>();
+    Soc.Models.user toProfile = ViewBag.user as Soc.Models.user;
+    if (ViewBag.notifications != null)
+    {
+        List<Soc.Models.notification> notif = ViewBag.notifications as List<Soc.Models.notification>;
+        specNotif = notif.Where(n => n.sender_id == user.id && n.user_id == toProfile.id && n.text_id == 1).ToList();
+    }
+    string color;
+    if (user.color != null)
+    {
+        color = user.color;
+    }
+    else
+    {
+        color = "rgb(47, 164, 7)";
+    }
+    if (ViewBag.myFriends != null)
+    {
+        friends = ViewBag.myFriends as List<Soc.Models.friend>;
+        specFriend = friends.Where(m => m.user.id == toProfile.id || m.user1.id == toProfile.id).ToList();
+    }
+    if (ViewBag.followerOf != null)
+    {
+        folowers = ViewBag.followerOf as List<Soc.Models.follower>;
+        specFolowers = folowers.ToList().ToList();
+    }
+    List<Soc.Models.user> onchat = ViewBag.onchat as List<Soc.Models.user>;
+    string url;
+    string src = Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content(toProfile.profile_photo);
+}
+@if (toProfile.back_photo == null)
+{
+    url = "../../Content/Backgrounds/1657c844b8a1130.jpg";
+}
+else
+{
+    int inedex = toProfile.back_photo.IndexOf('~');
+    string sr = toProfile.back_photo.Remove(inedex, 1);
+    url ="../.."+sr;
+}
+@Html.Hidden("currentUserId", (user.id))
+<div class="row">
+    <div class="col-md-9">
+        <div></div>
+        <div id="cover-photo" class="container-fluid img-fluid" style="background-image:url(@url);">
+            @if (user.id == toProfile.id)
+            {
+                <div class="row">
+                    <div class="from-exciting" data-type="cover" data-id="@user.id">
+                        <a class="btn btn-primary" data-toggle="modal" data-target="#myModa2">cover picture</a>
+                    </div>
+                    <div class="from-exciting" data-type="profile" data-id="@user.id">
+                        <a class="btn btn-primary" data-type="profile" data-toggle="modal" data-id="@user.id" data-target="#myModa2">profile picture</a>
+                    </div>
+                </div>
+            }
+            else if (user.stat == 1 && (toProfile.is_blocked==0 || toProfile.is_blocked==null))
+            {
+                <div class="row">
+                        <div data-user-id="@toProfile.id" class="btn btn-danger block-user"><img src="https://img.pngio.com/access-account-avatar-block-blocked-denied-user-icon-blocked-png-512_512.png" style="height:30px;width:30px;" alt="Alternate Text" /></div>
+                </div>
+            }
+            else if (user.stat == 1 && toProfile.is_blocked == 1)
+            {
+                <div class="row">
+                    <div data-user-id="@toProfile.id" class="btn btn-primary reblock-user"><img src="https://static.thenounproject.com/png/574710-200.png" style="height:30px;width:30px;" alt="Alternate Text" /></div>
+                </div>
+            }
+            else
+            {
+                if (ViewBag.friends != null)
+                {
+                    if (specNotif != null && specNotif.Count > 0)
+                    {
+                        <button id="addFriend-@toProfile.id" data-id="@toProfile.id"  type="button" class="btn  btn-add-friend btn-danger">
+                              Deny
+                        </button>
+                    }
+                    else if (specFriend != null && specFriend.Count > 0)
+                    {
+                        <button data-id="@toProfile.id" type="button" class="btn friend-con btn-unfriend btn-primary">
+                            unfriend
+                        </button>
+                    }
+                    else
+                    {
+                        <button id="addFriend-@toProfile.id" data-id="@toProfile.id" type="button" class="btn  btn-add-friend btn-primary">
+                            Add friend
+                        </button>
+                    }
+                }
+                else
+                {
+                    if (specNotif != null && specNotif.Count > 0)
+                    {
+                        <button id="addFriend-@toProfile.id" data-id="@toProfile.id" type="button" class="btn btn-add-friend btn-danger">Deny</button>
+                    }
+                    else
+                    {
+                        <button id="addFriend-@toProfile.id" data-id="@toProfile.id" class="btn btn-primary btn-add-friend">Add Friend</button>
+                    }
+                }
+                 if (specFolowers != null && specFolowers.Count>0)
+                 {
+                        <button  class="btn fol btn-unfollow btn-danger" data-id="@toProfile.id">unfollow</button>
+                 }
+                else
+                {
+                    <button  class="btn fol btn-success btn-follow" data-id="@toProfile.id">follow</button>
+                }
+          }
+            <h2 id="demo1" style="margin-top:15%;" class="text-light mr-1">@toProfile.name @toProfile.surname</h2>
+        </div>
+        <ul class="nav nav-tabs justify-content-center" style="font-family:Tahoma;font-size:large; background-color:@color;border-radius: 120px 90px 60px 30px/30px 60px 90px 120px;">
+            <li class="nav-item">
+                <a id="show-about" class="nav-link text-light" data-id="@toProfile.id" href="#">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-light" href="/Chrono/Index/@toProfile.id">Home</a>
+            </li>
+            <li class="nav-item d-none d-md-block">
+                <div class="container">
+                    <img id="prof" class="img-fluid rounded-circle" style="height:200px;width:200px;margin-top:-80%" src="@src" />
+                </div>
+             </li>
+            <li class="nav-item">
+                <a id="show-friends"  class="nav-link text-light" data-id="@toProfile.id" href="#">Friends</a>
+            </li>
+            <li class="nav-item">
+                <a id="show-photos" class="nav-link text-light" data-id="@toProfile.id" href="#">Photos</a>
+            </li>
+        </ul>
+        <div class="feed" style="margin-top:50px;">
+            @foreach (Soc.Models.NewsFeed news in ViewBag.feed)
+            {
+                string source = "";
+                string text = "";
+                if (news.photos != "" && news.photos != null)
+                {
+                    source = Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content(news.photos);
+                }
+                else if (news.videos != "" && news.videos != null)
+                {
+                    source = Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content(news.videos);
+                }
+                if (news.feedState_id == 1)
+                {
+                    text = "shared with you";
+                }
+                else if (news.feedState_id == 5)
+                {
+                    text = "update Cover photo";
+                }
+                else if (news.feedState_id == 6)
+                {
+                    text = "update profile photo";
+                }
+                else if (news.feedState_id == 3)
+                {
+                    text = "share";
+                }
+                if (news.contetnfeed != null && news.photos == null && news.videos == null)
+                {
+                    if (text == "share")
+                    {
+                        Soc.Models.NewsFeed feed = newsfeed.Where(m => m.id == news.on_feed_id).ToList().First();
+                        <div class="container container-@news.id" style="border:2px solid whitesmoke">
+                            <div class="row">
+                                <p class="col-10">
+                                    <strong><a href="/Chrono/index/@news.user_id">@news.user.name @news.user.surname</a> </strong> @text
+                                    <strong><a href="/Chrono/index/@feed.user_id">@feed.user.name @feed.user.surname</a></strong>`s
+                                    <a class="viewer text-primary" style="cursor:pointer;" data-id="@feed.user_id" data-feedId="@news.on_feed_id" data-toggle="modal" data-target="#myModal1">post</a>
+                                    in her timeline
+                                </p>
+                                <div class="dropdown ml-auto col-2">
+                                    <a data-toggle="dropdown">
+                                        <img class="ml-auto" data-id="@news.id" style="height:28px;width:28px;" src="~/Content/Backgrounds/share.png" />
+                                    </a>
+                                    <div class="dropdown-menu mr-5">
+                                        @if (user.stat == 1)
+                                        {
+                                            <a href="" data-toggle="modal" class="deleted-feed" data-id="@news.id" data-target="#myModalDelete">delete</a>
+                                        }
+                                        else if (news.user_id == user.id)
+                                        {
+                                            <a class="dropdown-item delete-from-timeline" data-id="@news.id">delete</a>
+                                        }
+                                        else
+                                        {
+                                            <a class="dropdown-item give-feedback" data-toggle="modal" data-target="#myModalDelete" data-id="@news.id" href="#">give feedback</a>
+                                            <a class="dropdown-item share-photo" style="white-space:normal" data-id="@news.id" href="#">share in your timeline</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <p>@news.contetnfeed</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="container container-@news.id" style="border:2px solid whitesmoke">
+                            <div class="row">
+                                <p class="col-10">
+                                    <strong class="ml-5"><a href="/Chrono/index/@news.user_id">@news.user.name @news.user.surname</a> </strong>
+                                    shared with you
+                                </p>
+                                <div class="dropdown ml-auto col-2">
+                                    <a data-toggle="dropdown">
+                                        <img class="ml-auto" data-id="@news.id" style="height:28px;width:28px;" src="~/Content/Backgrounds/share.png" />
+                                    </a>
+                                    <div class="dropdown-menu mr-5">
+                                        @if (user.stat == 1)
+                                        {
+                                            <a href="" data-toggle="modal" class="deleted-feed" data-id="@news.id" data-target="#myModalDelete">delete</a>
+                                        }
+                                        else if (news.user_id == user.id)
+                                        {
+                                            <a class="dropdown-item share" data-id="@news.id">reshare</a>
+                                            <a class="dropdown-item delete-from-timeline" data-id="@news.id">delete</a>
+                                        }
+                                        else
+                                        {
+                                            <a class="dropdown-item give-feedback" data-toggle="modal" data-target="#myModalDelete" data-id="@news.id" href="#">give feedback</a>
+                                            <a class="dropdown-item share" data-id="@news.id" href="#">share in your timeline</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <label>@news.contetnfeed</label>
+                        </div>
+                    }
+                }
+                else if (news.photos != null)
+                {
+                    if (text == "share")
+                    {
+                        Soc.Models.NewsFeed feed = newsfeed.Where(m => m.id == news.on_feed_id).ToList().First();
+                        <div class="container container-@news.id" style="border:2px solid whitesmoke">
+                            <div class="row">
+                                <p class="col-10">
+                                    <strong><a href="/Chrono/index/@news.user_id">@news.user.name @news.user.surname</a> </strong> @text
+                                    <strong><a href="/Chrono/index/@feed.user_id">@feed.user.name @feed.user.surname</a></strong>`s
+                                    <a class="viewer text-primary" style="cursor:pointer;" data-id="@feed.user_id" data-feedId="@news.on_feed_id" data-toggle="modal" data-target="#myModal1">post</a>
+                                    in her timeline
+                                </p>
+                                <div class="dropdown ml-auto col-2">
+                                    <a data-toggle="dropdown">
+                                        <img class="ml-auto" data-id="@news.id" style="height:28px;width:28px;" src="~/Content/Backgrounds/share.png" />
+                                    </a>
+                                    <div class="dropdown-menu mr-5">
+                                        @if (user.stat == 1)
+                                        {
+                                            <a href="" data-toggle="modal" class="deleted-feed" data-id="@news.id" data-target="#myModalDelete">delete</a>
+                                        }
+                                        else if (news.user_id == user.id)
+                                        {
+                                            <a class="dropdown-item delete-from-timeline" data-id="@news.id">delete</a>
+                                        }
+                                        else
+                                        {
+                                            <a class="dropdown-item give-feedback" data-toggle="modal" data-target="#myModalDelete" data-id="@news.id" href="#">give feedback</a>
+                                            <a class="dropdown-item share-photo" style="white-space:normal" data-id="@news.id" href="#">share in your timeline</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <a class="viewer" data-feedId="@news.id" data-id="@news.user_id" data-toggle="modal" data-target="#myModal1">
+                                <img class="w-100 m-auto" style="height:500px;" src="@source" />
+                            </a>
+                            <p>@news.contetnfeed</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="container container-@news.id" style="border:2px solid whitesmoke">
+                            <div class="row">
+                                <p class="col-10">
+                                    <strong><a href="/Chrono/index/@news.user_id">@news.user.name @news.user.surname</a> </strong> @text
+                                </p>
+                                <div class="dropdown ml-auto col-2">
+                                    <a data-toggle="dropdown">
+                                        <img class="ml-auto" data-id="@news.id" style="height:28px;width:28px;" src="~/Content/Backgrounds/share.png" />
+                                    </a>
+                                    <div class="dropdown-menu mr-5 ">
+                                        @if (user.stat == 1)
+                                        {
+                                            <a class="deleted-feed" data-id="@news.id" href="" data-toggle="modal" data-target="#myModalDelete">delete</a>
+                                        }
+
+                                        else if (news.user_id == user.id)
+                                        {
+                                            <a class="dropdown-item share-photo" data-id="@news.id" href="#">reshare</a>
+                                            <a class="dropdown-item delete-from-timeline" data-id="@news.id" href="#">delete</a>
+                                        }
+                                        else
+                                        {
+                                            <a class="dropdown-item give-feedback" data-toggle="modal" data-target="#myModalDelete" data-id="@news.id" href="#">give feedback</a>
+                                            <a class="dropdown-item share-photo" style="white-space:normal" data-id="@news.id" href="#">share in your timeline</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <a class="viewer" data-feedId="@news.id" data-id="@news.user_id" data-toggle="modal" data-target="#myModal1">
+                                <img class="w-100 m-auto" style="height:500px;" src="@source" />
+                            </a>
+                            <p>@news.contetnfeed</p>
+                        </div>
+                    }
+                }
+                else if (news.videos != null)
+                {
+                    if (text == "share")
+                    {
+                        Soc.Models.NewsFeed feed = newsfeed.Where(m => m.id == news.on_feed_id).ToList().First();
+                        <div class="container container-@news.id" style="border:2px solid whitesmoke">
+                            <div class="row">
+                                <p class="col-10">
+                                    <strong><a href="/Chrono/index/@news.user_id">@news.user.name @news.user.surname</a> </strong> @text
+                                    <strong><a href="/Chrono/index/@feed.user_id">@feed.user.name @feed.user.surname</a></strong>`s
+                                    <a class="viewer text-primary" style="cursor:pointer;" data-id="@feed.user_id" data-feedId="@news.on_feed_id" data-toggle="modal" data-target="#myModal1">post</a>
+                                    in her timeline
+                                </p>
+
+                                <div class="dropdown ml-auto col-2">
+                                    <a data-toggle="dropdown">
+                                        <img class="ml-auto" data-id="@news.id" style="height:28px;width:28px;" src="~/Content/Backgrounds/share.png" />
+                                    </a>
+                                    <div class="dropdown-menu mr-5">
+                                        @if (user.stat == 1)
+                                        {
+                                            <a href="" data-toggle="modal" class="deleted-feed" data-id="@news.id" data-target="#myModalDelete">delete</a>
+                                        }
+                                        else if (news.user_id == user.id)
+                                        {
+                                            <a class="dropdown-item delete-from-timeline" data-id="@news.id">delete</a>
+                                        }
+                                        else
+                                        {
+                                            <a class="dropdown-item give-feedback" data-toggle="modal" data-target="#myModalDelete" data-id="@news.id" href="#">give feedback</a>
+                                            <a class="dropdown-item share-photo"  style="white-space:normal"  data-id="@news.id" href="#">share in your timeline</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <a class="viewer" data-feedId="@news.id" data-id="@news.user_id" data-toggle="modal" data-target="#myModal1">
+                                <video class="w-100" style="height:400px;" src="@source" />
+                            </a>
+                            <p>@news.contetnfeed</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="container container-@news.id" style="border:2px solid whitesmoke">
+                            <div class="row">
+                                <p class="col-10">
+                                    <strong><a href="/Chrono/index/@news.user_id">@news.user.name @news.user.surname</a> </strong> share vith you
+                                </p>
+                                <div class="dropdown ml-auto col-2">
+                                    <a data-toggle="dropdown">
+                                        <img class="ml-auto" data-id="@news.id" style="height:28px;width:28px;" src="~/Content/Backgrounds/share.png" />
+                                    </a>
+                                    <div class="dropdown-menu mr-5">
+                                        @if (user.stat == 1)
+                                        {
+                                            <a class="deleted-feed" data-id="@news.id" href="" data-toggle="modal" data-target="#myModalDelete">delete</a>
+                                        }
+                                        else if (news.user_id == user.id)
+                                        {
+                                            <a class="dropdown-item share-video" data-id="@news.id" href="#">reshare</a>
+                                            <a class="dropdown-item delete-from-timeline" data-id="@news.id" href="#">delete</a>
+                                        }
+                                        else
+                                        {
+                                            <a class="dropdown-item give-feedback" data-toggle="modal" data-target="#myModalDelete" data-id="@news.id" href="#">give feedback</a>
+                                            <a class="dropdown-item share-video"  style="white-space:normal"  data-id="@news.id" href="#">share in your timeline</a>
+                                        }
+                                    </div>
+                                </div>
+
+                            </div>
+                            <a class="viewer" data-feedId="@news.id" data-id="@news.user_id" data-toggle="modal" data-target="#myModal1">
+                                <video class="w-100" style="height:400px;" src="@source" />
+                            </a>
+                            <p>@news.contetnfeed</p>
+                        </div>
+                    }
+                }
+                else if (news.url != null)
+                {
+                    <div class="container container-@news.id" style="border:2px solid whitesmoke">
+                        <div class="row">
+                            <p class="col-10">
+                                <strong><a href="/Chrono/index/@news.user_id">@news.user.name @news.user.surname</a> </strong> share vith you
+                            </p>
+                            <div class="dropdown ml-auto col-2">
+                                <a data-toggle="dropdown">
+                                    <img class="ml-auto" data-id="@news.id" style="height:28px;width:28px;" src="~/Content/Backgrounds/share.png" />
+                                </a>
+                                <div class="dropdown-menu mr-5">
+                                    @if (user.stat == 1)
+                                    {
+                                        <a href="" class="deleted-feed" data-id="@news.id"  data-toggle="modal" data-target="#myModalDelete">delete</a>
+                                    }
+                                    else if (news.user_id == user.id)
+                                    {
+                                        <a class="dropdown-item share-url" data-id="@news.id" href="#">reshare</a>
+                                        <a class="dropdown-item delete-from-timeline" data-id="@news.id" href="#">delete</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="dropdown-item give-feedback"  data-toggle="modal" data-target="#myModalDelete" data-id="@news.id" href="#">give feedback</a>
+                                        <a class="dropdown-item share-url"  data-id="@news.id" href="#">share in your timeline</a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <iframe class="w-100" height="460" src="@news.url" allowfullscreen></iframe>
+                        <p>@news.contetnfeed</p>
+                    </div>
+                }
+                string link = "likeNew.png";
+                string stat = "non-liked";
+                if (ViewBag.likes.Count != 0)
+                {
+                    isliked = likes.Where(m => m.Newsfeed_id == news.id).ToList();
+                    if (isliked.Count != 0)
+                    {
+                        stat = "liked";
+                        link = "likeYes.png";
+                    }
+                }
+
+
+                <div class="container-@news.id row" style="border:2px solid whitesmoke">
+                    <div class="like-icon-@news.id col-1 mt-2 ">
+                        <img class="like ml-auto" data-id="@news.id" data-liked="@stat" alt="like" style="height:19px;width:19px;" src="~/Content/Backgrounds/@link" />
+                    </div>
+                    <div class="dropdown col-10 mr-auto">
+                        <a class="comment btn" data-id="@news.id" data-toggle="collapse" data-target="#demo-@news.id" aria-expanded="false">
+                            <img style="height:19px;width:19px;" src="~/Content/Backgrounds/comm.png" />
+                        </a>
+                        <div id="demo-@news.id" class="collapse">
+                            <div id="comment-area-@news.id" class="for-comment w-100">
+
+                            </div>
+                            <hr />
+                            <div class="form-inline">
+                                <input id="comment-text-@news.id" data-id=@news.id type="text" class="w-75" placeholder="comment..." value="" />
+                                <input class="Com btn btn-primary w-25" data-id="@news.id" type="submit" name="name" value="send" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="cotainer mt-3">
+            <div class="row show-friends">
+
+            </div>
+        </div>
+        <div class="container mt-3">
+            <div class="show-about">
+
+            </div>
+        </div>
+        <div class="container mt-3">
+            <div class="row show-photo">
+              
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="col-md-3 d-none d-md-block fixed-bottom" style="margin-left:75%;">
+        <div class="container">
+            <h6>messanger</h6>
+                @foreach (Soc.Models.user friend in onchat)
+                {
+                    string source1 = Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content(friend.profile_photo);
+                    <button data-friendName="@friend.name" style="background-color:@color" data-id="@friend.id" data-friendSurname="@friend.surname" class="btn  btn-message w-100 text-left">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <img class="rounded-circle" src="@source1" style="height:40px;width:40px" />
+                            </div>
+                            <div class="col-md-7">
+                                <p class="text-light text-center"> @friend.name @friend.surname </p>
+                            </div>
+                            <span id="badge-@friend.id" class="badge badge-light"></span>
+                        </div>
+                    </button>
+                }
+        </div>
+    </div>
+
+</div>
+<!--show all pfotos for choose-->>
+<!-- The Modal -->
+<div class="modal" id="myModa2">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Select photo</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="photo-modal">
+
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer modal-smood">
+             
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            new CircleType(document.getElementById('demo1'))
+            .radius(384);
+            $("#show-friends").click(function () {
+                let id = $(this).attr("data-id");
+                $(".feed").empty();
+                $(".show-about").empty();
+                $(".show-friends").empty();
+                $(".show-photo").empty();
+                $.ajax({
+                    type: "post",
+                    url: "/Chrono/GetFriends/" + id,
+                    success: function (r) {
+                        r.forEach((item) => {
+                            let id = item.id1;
+                            let name = item.name;
+                            let surname = item.surname;
+                            let photo = item.photo;
+                            photo = photo.replace('~', '');
+                            let src = "../.." + photo;
+                            $(".show-friends").append(`
+                                <div class ="card-${id} col-12 col-md-4 col-xs-3">
+                                    <img class ="card-img-top" style="height:250px;" src="${photo}">
+                                    <div class ="card-footer">
+                                        <a href="/Chrono/Index/${id}" class ="text-primary">${name} ${surname}</a>
+                                     </div>
+                                </div>
+                                `)
+                        });
+                    }
+                })
+            });
+            $("#show-about").click(function () {
+                let id = $(this).attr("data-id");
+                $(".feed").empty();
+                $(".show-about").empty();
+                $(".show-friends").empty();
+                $(".show-photo").empty();
+                $.ajax({
+                    type: "post",
+                    url: "/Chrono/GetAbout/" + id,
+                    success: function (r) {
+                        let  name = r. name;
+                            let surname = r.surname;
+                            let age = r.age;
+                            let email = r.email;
+                            let  gender = r.gender;
+                            let phone = r.phone;
+                            let country = r.country;
+                            $(".show-about").append(`
+                                     <table class ="table table-dark table-hover">
+                                        <tbody>
+                                          <tr>
+                                            <td>name</td>
+                                            <td>${name}</td>
+                                          </tr>
+                                          <tr>
+                                            <td>surname</td>
+                                            <td>${surname}</td>
+                                          </tr>
+                                          <tr>
+                                            <td>age</td>
+                                            <td>${age}</td>
+                                          </tr> <tr>
+                                            <td> email</td>
+                                            <td>${ email}</td>
+                                          </tr> <tr>
+                                            <td>gender</td>
+                                            <td>${gender}</td>
+                                          </tr> <tr>
+                                            <td>phone number</td>
+                                            <td>${phone}</td>
+                                          </tr> <tr>
+                                            <td>country</td>
+                                            <td>${country}</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                `)
+                    }
+                })
+            });
+            $("#show-photos").click(function () {
+                let id = $(this).attr("data-id");
+                $(".feed").empty();
+                $(".show-about").empty();
+                $(".show-friends").empty();
+                $(".show-photo").empty();
+                $.ajax({
+                    type: "post",
+                    url: "/Chrono/GetPhoto/"+id,
+                    success: function (r) {
+                        r.forEach((item) => {
+                            let FeedId = item.id1;
+                            let likes = item.likes;
+                            let comments = item.comments;
+                            let photo = item.photo;
+                            photo = photo.replace('~', '');
+                            let src = "../.." + photo;
+                            $(".show-photo").append(`
+                                <div class ="col-md-3 col-xs-3 col-6">
+                                 <div class ="viewer" data-feedId="${FeedId}" data-id="${id}" data-toggle="modal" data-target="#myModal1">
+                                    <img class="mt-2" height="100" width="100" src="${photo}"/>
+                                 </div>
+                                </div>
+                                `)
+
+                        });
+                    }
+                })
+            });
+        });
+    </script>
+    }
+

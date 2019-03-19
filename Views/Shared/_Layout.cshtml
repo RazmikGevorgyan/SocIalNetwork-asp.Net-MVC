@@ -1,0 +1,676 @@
+﻿@{ 
+    Soc.Models.user usr = ViewBag.currentuser as Soc.Models.user;
+    string color;
+}
+     
+   <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                #cover {
+                    background: url("http://www.aveva.com/Images/ajax-loader.gif") no-repeat scroll center center #FFF;
+                    position: absolute;
+                    height: 100%;
+                    width: 100%;
+                }
+                @@media screen and (min-width: 600px) {
+                    #newsFeed {
+                        margin-left: 20%;
+                    }
+                }
+                 .btn-message:hover {
+                    opacity:0.8;
+                    transition:1.5s;
+                }
+                .navbar-nav > li {
+                    margin-left: 10px;
+                    margin-right: 10px;
+                }
+                    .navbar-nav > li a img {
+                        height: 25px;
+                        width: 25px;
+                    }
+                /* width */
+                ::-webkit-scrollbar {
+                  width: 10px;
+                }
+                .modal-backdrop {
+                    /* bug fix - no overlay */    
+                    display: none;    
+                }
+                /* Track */
+                ::-webkit-scrollbar-track {
+                  background: #f1f1f1; 
+                }
+ 
+                /* Handle */
+                ::-webkit-scrollbar-thumb {
+                  background: #888; 
+                }
+
+                /* Handle on hover */
+                ::-webkit-scrollbar-thumb:hover {
+                  background: #555; 
+                }
+
+                .image-upload > input {
+                    display: none;
+                }
+
+                .navbar {
+                    height: 70px !important;
+                }
+                a:hover{
+                   cursor:pointer;
+                   text-decoration:none!important;
+                   transition:1.5s!important;
+                }
+                .give-feedback{
+                    border:2px solid black!important;
+                    background-color:deepskyblue!important;
+                    white-space:normal!important;
+                }
+                .share-photo {
+                    border:2px solid black!important;
+                white-space:normal!important;
+                background-color:deepskyblue!important;
+                }
+                .like:hover {
+                 cursor:pointer;
+                }
+                      @@media screen and (max-width: 600px) {
+                    #newsFeed {
+                        margin-left: 0%;
+                    }
+                    .nav-link img {
+                        height:18px!important;
+                        width:18px!important;
+                        padding:0!important;
+                        margin-top:15px!important;
+                    }
+                    #search{ 
+                        margin-top:22px!important;
+                        height:20px!important;
+                        width:70px!important;
+                    }
+                    #general-navbar {
+                        margin:auto!important;
+                    }
+                    iframe {
+                   height:250px!important;
+                     }
+                  .viewer img {
+                   height:250px!important;
+                  }
+                 div.col-6 .viewer img {
+                   height:150px!important;
+                  }
+                }
+   .dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px;
+    border-radius: 0 6px 6px 6px;
+}
+
+.dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+}
+
+.dropdown-submenu>a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #ccc;
+    margin-top: 5px;
+    margin-right: -10px;
+}
+
+.dropdown-submenu:hover>a:after {
+    border-left-color: #fff;
+}
+
+.dropdown-submenu.pull-left {
+    float: none;
+}
+
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+    -webkit-border-radius: 6px 0 6px 6px;
+    -moz-border-radius: 6px 0 6px 6px;
+    border-radius: 6px 0 6px 6px;
+}
+            </style>
+
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link href="~/Content/messengerStyle.css" rel="stylesheet" />
+            <title>@ViewBag.Title - My ASP.NET Application</title>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+              <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+            <!-- jQuery library -->
+            <!-- Popper JS -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+            <!-- Latest compiled JavaScript -->
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+            <script src="~/scripts/layer.js"></script>
+            <script src="~/scripts/circletype.min.js"></script>
+            <script src="~/scripts/photoViewer.js"></script>
+            <script src="~/scripts/photoChanger.js"></script>
+            <script src="~/scripts/search.js"></script>
+            <script src="~/scripts/share.js"></script>
+            <script src="~/scripts/appendUntill.js"></script>
+            <script src="~/scripts/jscolor.js"></script>
+            <script src="~/scripts/changeColor.js"></script>
+            <script src="~/scripts/admin.js"></script>
+            <script src="~/scripts/jquery.cookie.js"></script>
+            <script src="~/scripts/messengerPage.js"></script>
+            <script src="~/scripts/changes.js"></script>
+                   @RenderSection("scripts", required: false)
+        </head>
+        <body>
+            @if (usr.color != null)
+            {
+                color = usr.color;
+            }
+            else
+            {
+                color = "rgb(47, 164, 7)";
+            }
+            @if (usr.stat != 1)
+            {
+            <nav class="navbar navbar-expand"  style="background-color:@color ;height:40px!important;">
+              
+                        <a class="navbar-brand  d-none d-md-block text-light" href="/Profile/Index/@ViewBag.currentuser.id">Gamble</a>
+                        <div class="collapse navbar-collapse" id="navbarsExample02">
+                            <ul id="general-navbar" class="navbar-nav text-center ml-auto">
+                               
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Profile/Index/@ViewBag.currentuser.id">
+                                        <img  src="https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-home-4.png&r=255&g=255&b=255" />
+                                    </a>
+                                </li>
+                                @*form normal screens*@
+                                @*message for small screens*@
+                                <li class="nav-item for-small">
+                                    <a class="nav-link" href="/Profile/Messenger/">
+                                        <img  src="https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-email-2.png&r=255&g=255&b=255" />
+                                    </a>
+                                </li>
+                                @*notifications for Normal screeen*@
+                                <li class="nav-item normal dropdown position-static d-none d-md-block">
+                                    <a class="nav-link" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <img class="notif" alt="notifications" src="https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-globe-5.png&r=255&g=255&b=255" />
+                                        @if (ViewBag.unreadNotif != 0)
+                                        {
+                                            <span class="badge badgeNotif badge-warning position-absolute" style="margin-top:-30px!important;">@ViewBag.unreadNotif</span>
+                                        }
+                                    </a>
+                                    <div class="dropdown-menu w-25 text-center" style="margin-left:70%;height:200px;overflow:scroll;overflow-x: hidden" aria-labelledby="dropdown03">
+                                        @foreach (Soc.Models.notification not in ViewBag.notifications)
+                                        {
+                                            if (not.text_id == 1)
+                                            {
+                                                <div class="dropdown-item">
+                                                    <p class="text-justify"><strong class="names" data-name="@not.user1.name @not.user1.surname"> @not.user1.name @not.user1.surname</strong><br /> send you friend suggestion </p>
+                                                    <button data-id="@not.user1.id" data-notif-id="@not.id" class="btn btn-primary Confim">Confim</button>
+                                                    <button class="btn btn-danger Deny " data-notif-id="@not.id">Deny</button>
+                                                </div>
+                                            }
+                                            else if (not.text_id == 4)
+                                            {
+                                                <div class="dropdown-item">
+                                                    <p class="text-justify"><strong> @not.user1.name @not.user1.surname</strong><br /> @not.notification_text.notification_text1 </p>
+                                                </div>
+                                            }
+                                            else if (not.text_id == 9)
+                                            {
+                                                <div class="dropdown-item">
+                                                   <strong class="text-left">@not.user1.name</strong>
+                                                    <br /> 
+                                                    <p class="text-justify" style="white-space:normal">
+                                                        hy  send  this link to your friends <br>
+                                                        and we will give you new opportunities <br>
+                                                        <a class="col-12 text-left" href="@Url.Action("Signup", "User", new { Token = not.user_id }, Request.Url.Scheme)/">
+                                                             @Url.Action("Signup", "User", new { Token = not.user_id }, Request.Url.Scheme)
+                                                        </a>
+                                                    </p>
+                                                </div>
+                                            }
+                                            else if (not.text_id == 10)
+                                            {
+                                                <div class="dropdown-item">
+                                                    <p class="text-justify">
+                                                        congratulation you invite 3 <br />
+                                                        friends and now you can change <br />
+                                                        color of your profile
+                                                    </p>
+                                                </div>
+                                            }
+                                            else if (not.text_id == 11 || not.text_id == 12 || not.text_id == 13 || not.text_id == 14 || not.text_id == 15)
+                                            {
+                                                <div class="dropdown-item">
+                                                    <p class="text-justify">
+                                                        <label class="text-danger">
+                                                            <br>you share illegal  @not.notification_text.notification_text1 <br />
+                                                            that content has been blocked <br />
+                                                            if you get more than 3 alert <br />
+                                                            we will block yuor account
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="dropdown-item">
+                                                    <p class="text-justify">
+                                                        <a href="/Chrono/Index/@not.user1.id">@not.user1.name  @not.user1.surname</a>
+                                                        <br> @not.notification_text.notification_text1
+                                                        <a class="viewer text-primary" style="cursor:pointer;" data-id="@not.user_id" data-feedId="@not.on_feed_id" data-toggle="modal" data-target="#myModal1">post</a>
+                                                    </p>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </li>
+                                @*notifications for small screeen*@
+                                <li class="nav-item dropdown position-static d-block d-md-none for-small">
+                                    <a class="nav-link" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <img class="notif" alt="notifications" src="https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-globe-5.png&r=255&g=255&b=255" /><br />
+                                        @if (ViewBag.unreadNotif != 0)
+                                        {
+                                            <span class="badge badgeNotif badge-warning position-absolute" style="margin-top:-30px!important;">@ViewBag.unreadNotif</span>
+                                        }
+                                    </a>
+                                    <div class="dropdown-menu w-100 text-center" aria-labelledby="dropdown03">
+                                        @foreach (Soc.Models.notification not in ViewBag.notifications)
+                                        {
+                                            if (not.text_id == 1)
+                                            {
+                                                <div class="dropdown-item">
+                                                    <p class="text-justify"><a href="/Chrono/Index/@not.user1.id"><strong class="names" data-name="@not.user1.name @not.user1.surname"> @not.user1.name @not.user1.surname</strong></a><br /> send you friend suggestion </p>
+                                                    <button data-id="@not.user1.id" data-notif-id="@not.id" class="btn btn-primary Confim">Confim</button>
+                                                    <button class="btn btn-danger Deny" data-notif-id="@not.id">Deny</button>
+                                                </div>
+                                            }
+                                            else if (not.text_id == 4)
+                                            {
+                                                <div class="dropdown-item">
+                                                    <p class="text-justify"><strong> @not.user1.name @not.user1.surname</strong><br /> @not.notification_text.notification_text1 </p>
+                                                </div>
+                                            }
+                                            else if (not.text_id == 9)
+                                            {
+                                                <div class="dropdown-item text-left">
+                                                    <strong class="text-left mr-auto">@not.user1.name</strong>
+                                                    <br />
+                                                    <label class="text-left" style="white-space:normal;">
+                                                        hy  send  this link to your friends
+                                                        and we will give you new opportunities
+                                                        <a class="text-left" href="@Url.Action("Signup", "User", new { Token = not.user_id }, Request.Url.Scheme)/">
+                                                            @Url.Action("Signup", "User", new { Token = not.user_id }, Request.Url.Scheme)
+                                                        </a>
+                                                    </label>
+                                                </div>
+                                            }
+                                            else if (not.text_id == 11 || not.text_id == 12 || not.text_id == 13 || not.text_id == 14 || not.text_id == 15)
+                                            {
+                                                <div class="dropdown-item">
+                                                    <p class="text-justify">
+                                                        <label class="text-danger">
+                                                            <br>you share illegal  @not.notification_text.notification_text1 <br />
+                                                            that content has been blocked <br />
+                                                            if you get more than 3 alert <br />
+                                                            we will block yuor account
+                                                        </label>
+                                                        <a class="viewer text-primary" style="cursor:pointer;" data-id="@not.user_id" data-feedId="@not.on_feed_id" data-toggle="modal" data-target="#myModal1">post</a>
+                                                    </p>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="dropdown-item">
+                                                    <p class="text-justify">
+                                                        <a href="/Chrono/Index/@not.user1.id">@not.user1.name  @not.user1.surname</a>
+                                                        <br> @not.notification_text.notification_text1
+                                                        <a class="viewer text-primary" style="cursor:pointer;" data-id="@not.user_id" data-feedId="@not.on_feed_id" data-toggle="modal" data-target="#myModal1">post</a>
+                                                    </p>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </li>
+
+                                @*settingsfor normal screesns*@
+                                <li class="nav-item dropdown normal position-static d-none d-md-block">
+                                    <a class="nav-link"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <img class="" src="https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-gear-2.png&r=255&g=255&b=255" />
+                                    </a>
+                                    <div class="dropdown">
+                                        <ul class="dropdown-menu w-25 text-center" role="menu" style="margin-left:73%" aria-labelledby="dropdownMenu">
+                                              <li class="dropdown-item dropdown">
+                                                <li class="dropdown-submenu">
+                                                <a class="text-dark" tabindex="-1" href="#">Account settings</a>
+                                                    <ul class="dropdown-menu w-100" style="white-space:normal" aria-labelledby="dropdown2-1">
+                                                        <li class="change-pas"><a class="dropdown-item" data-toggle="modal" data-target="#ModalChanges" href="#">change Password</a></li>
+                                                        <li><a class="redact-profile dropdown-item" data-toggle="modal" data-target="#ModalChanges" href="#">redact profile</a></li>
+                                                    </ul>
+                                                    @if (usr.invited_by_me >= 1)
+                                                    {
+                                                        <li> <a class="text-secondary" data-toggle="modal" data-target="#myModalColor" href="#">change color</a></li>
+                                                    }
+                                                    <li> <a class="dropdown-item text-secondary" href="">Privacy</a></li>
+                                                    <li> <a class="dropdown-item text-secondary log-out" href="/User/Index/">Log Out</a></li>
+                                         </ul>
+                                     </div>
+                                   
+                                @*Settings For Small Screens*@
+                                <li class="nav-item dropdown position-static d-block d-md-none small">
+                                    <a class="nav-link" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <img class="" src="https://iconmonstr.com/wp-content/g/gd/makefg.php?i=../assets/preview/2012/png/iconmonstr-gear-2.png&r=255&g=255&b=255" />
+                                    </a>
+                                    <ul class="dropdown-menu w-100 text-center" aria-labelledby="dropdown03">
+                                        <li class="dropdown-item dropdown text-center">
+                                        <li class="dropdown-submenu text-center">
+                                            <a class="text-dark text-center"  id="colPs" data-toggle="collapse" data-target="#demo">Account settings</a>
+                                            <ul id="demo" class="collapse text-center mr-5">
+                                                <li class="dropdown-item" style="background-color:@color;"><a class="change-pas text-light"  data-toggle="modal" data-target="#ModalChanges" href="#">change Password</a></li>
+                                                <li class="dropdown-item" style="background-color:@color;" ><a class="redact-profile text-light" data-toggle="modal" data-target="#ModalChanges" href="#">redact profile</a></li>
+                                            </ul>
+                                            @if (usr.invited_by_me >= 1)
+                                            {
+                                            <li> <a class="text-secondary  text-center" data-toggle="modal" data-target="#myModalColor" href="#">change color</a></li>
+                                            }
+                                            <li> <a class="dropdown-item text-secondary  text-center" href="">Privacy</a></li>
+                                            <li> <a class="dropdown-item text-secondary log-out  text-center" href="/User/Index/">Log Out</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item active ">
+                                    @*searche box*@
+                                    <form class="form-inline mr-auto " autocomplete="off">
+                                        <input id="search" class="form-control" type="text" placeholder="Search">
+                                        <button id="searchAll" class="btn btn-outline-light d-none d-md-block" type="submit">Search</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+            </nav>
+            @*searche cntainer for normal*@
+            <div class="dropdown sticky-top d-none d-md-block" style="margin-left:80%">
+                <div class="serche-result dropdown-menu">
+                </div>
+            </div>
+            @*searche cntainer for small*@
+            <div class="dropdown align-top d-block d-md-none">
+                <div class="serche-result dropdown-menu w-100">
+
+                </div>
+            </div>
+            }
+            else
+            {
+                <a href="/Admin/Index/">go back</a>
+            }
+                @*chatbox*@
+                <div id="chatbox" class="fixed-bottom" style="margin-right:75%!important">
+                    <div class="container" style="width:300px!important;">
+                        <div class="row chat-window col-xs-5 col-md-3" id="chat_window_1" style="margin-left:10px;width:300px!important;">
+                            <div class="col-xs-12 col-md-12" style="width:300px!important">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading top-bar rounded"  style="width:350px!important;background-color:@color;">
+                                        <div class="row">
+                                            <div class="col-md-7 ml-1">
+                                                <h3 class="panel-title" style="font-size:15px;"><span class="glyphicon glyphicon-comment"></span></h3>
+                                            </div>
+                                            <div class="col-md-4  ml-auto">
+                                                <a href="#"><span id="minim_chat_window" style="font-size:20px;" class="glyphicon glyphicon-minus icon_minim">-</span></a>
+                                                <a href="#"><span class="glyphicon glyphicon-remove icon_close" style="font-size:20px;" data-id="chat_window_1">&times;</span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="contain" class="panel-body msg_container_base" style="width:350px!important;">
+                                    </div>
+                                    <div class="panel-footer" style="width:350px!important">
+                                        <div class="input-group">
+                                            <input id="btn-input" name="input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-primary btn-sm" id="chat">send</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <style>
+                    .carousel-control .glyphicon-chevron-right, .carousel-control .icon-next {
+                        margin-right: -382px;
+                    }
+
+                    .carousel-control .glyphicon-chevron-left, .carousel-control .icon-prev {
+                        margin-left: -71px;
+                    }
+                </style>
+
+            <!--photo viewer-->
+                <div class="container">
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog modal-xl" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div id="myCarousel" class="carousel slide" data-interval="false" data-ride="carousel" style="height:100%;">
+
+                                            <!-- Wrapper for slides -->
+                                            <div class="carousel-inner">
+                                            </div>
+                                            <!-- Left and right controls -->
+                                            <a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
+                                                <span class="carousel-control-prev-icon"></span>
+                                            </a>
+                                            <a class="carousel-control-next" href="#myCarousel" data-slide="next">
+                                                <span class="carousel-control-next-icon"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="modal-body inline">
+                                            <div class="row">
+                                                <div class="user_profile col-3">
+
+                                                </div>
+                                                <div class="user_name col-9">
+                                                </div>
+                                            </div>
+                                            <hr />
+                                            <div class="for-comment" style="height:300px; overflow:scroll;overflow-x:hidden;">
+
+                                            </div>
+                                            <input placeholder="Comment" type="text" class="comment-input form-control w-100" />
+                                            <button class="commentOn btn btn-sm btn-primary pull-right">comment</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+         
+               <!-- modal for admin send noif-->
+            <div class="modal" id="myModalDelete">
+                <div class="modal-dialog" >
+                    <div class="modal-content"> 
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">what the reason</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="optradio" value="1">illegal Contetn
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="optradio" value="2">naked Content
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="optradio" value="3">Fake photo
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="optradio" value="4">copyright
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="optradio" value="5">other
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer" style="z-index:300;">
+                            <button id="delete-and-send" type="button" class="btn btn-danger">confirm</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal" id="myModalColor" style="z-index:700!important;">
+                <div class="modal-dialog" style="z-index:600;">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header" style="z-index:500;">
+                            <h4 class="modal-title">select color</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body" style="z-index:400;">
+                            <input class="jscolor" value="ab2567">
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer" style="z-index:300;">
+                            <button type="button" class="btn btn-primary change-color" data-id="@usr.id">Confirm</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Modal -->
+            <div class="modal" id="ModalChanges">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header change-header">
+                            <h4 class="modal-title">Modal Heading</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body change-body">
+                          
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer change-footer">
+                            <label class="err-mes"></label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal" id="contactUs">
+                <div class="modal-dialog modal-xl bg-dark">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card">
+                                            <div class="card-header bg-primary text-white">
+                                                <i class="fa fa-envelope"></i> Contact us.
+                                            </div>
+                                            <div class="card-body">
+                                                <form action="/Chrono/SendMessage/">
+                                                    <div class="form-group">
+                                                        <h5>share your problem with us</h5><br />
+                                                        <h5>we will connect with you <br /> as soon as it possible</h5>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="message">Message</label>
+                                                        <textarea class="form-control" name="admin-message" id="message" rows="6" required></textarea>
+                                                    </div>
+                                                    <div class="mx-auto">
+                                                        <button type="submit" class="btn btn-primary text-right admin-send">Submit</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-4">
+                                        <div class="card bg-light mb-3">
+                                            <div class="card-header bg-success text-white text-uppercase"><i class="fa fa-home"></i> Address</div>
+                                            <div class="card-body">
+                                                <p>Gambel Company Present</p>
+                                                <p>Yerevan</p>
+                                                <p>Armenia</p>
+                                                <p>Email : gamblememble@gmail.com</p>
+                                                <p>Tel. +374 96 855590</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="container-fluid body-content mt-3">
+                    @RenderBody()
+                    <hr />
+                </div>
+
+
+</body>
+    </html>
+

@@ -1,0 +1,292 @@
+﻿
+@{
+    Layout = null;
+    List<Soc.Models.NewsFeed> newses = ViewBag.feed as List<Soc.Models.NewsFeed>;
+    List<Soc.Models.NewsFeed> owners = ViewBag.owner as List<Soc.Models.NewsFeed>;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+    <script src="~/scripts/layer.js"></script>
+    <script src="~/scripts/circletype.min.js"></script>
+    <script src="~/scripts/photoViewer.js"></script>
+    <script src="~/scripts/photoChanger.js"></script>
+    <script src="~/scripts/search.js"></script>
+    <script src="~/scripts/share.js"></script>
+    <link href="~/Content/messengerStyle.css" rel="stylesheet" />
+    <script src="~/scripts/appendUntill.js"></script>
+    <script src="~/scripts/jscolor.js"></script>
+    <script src="~/scripts/changeColor.js"></script>
+    <script src="~/scripts/admin.js"></script>
+</head>
+<body>
+        <div class="row">
+                <div class="nav flex-column bg-dark text-light col-3 position-fixed h-100">
+                    <div class="nav-item">
+                        <a class="nav-link text-light btn active" href="#">Home</a>
+                    </div>
+                    <div class="nav-item">
+                        <a class="messenger nav-link btn text-light" href="/Admin/Messenger/">Messenger
+                        @if (ViewBag.unreadMessages != 0)
+                        {
+                            <span class="badge badge-secondary">@ViewBag.unreadMessages </span>
+                        }
+                        </a>
+                    </div>
+                    <div class="nav-item text-center">
+                        <a class="dropdown-item btn btn-primary send-link text-danger" href="/Auto_Notification_Sender/Index/">send registration link to all</a>
+                    </div>
+                    <div class="nav-item dropdown text-center text-light">
+                        <a class="nav-link text-center text-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Set advert</a>
+                        <div class="dropdown-menu text-center bg-dark">
+                            <a class="dropdown-item btn text-light set-adv w-100" data-toggle="modal" data-target="#advModal" data-id="1" href="#">Advert 1</a>
+                            <a class="dropdown-item btn text-light set-adv w-100" data-toggle="modal" data-target="#advModal" data-id="2" href="#">Advert 2</a>
+                            <a class="dropdown-item btn text-light set-adv w-100" data-toggle="modal" data-target="#advModal" data-id="3" href="#">Advert 3</a>
+                        </div>
+                    </div>
+                    <div class="nav-item">
+                        <a class="nav-link text-light btn" href="#">log out</a>
+                    </div>
+                </div>
+            <div class="col-8" style="margin-left:25%!important">
+                <div class="row">
+                    <div class="col-6 mb-2">
+                        <form class="form-inline mr-auto d-none d-md-block">
+                            <input id="search" class="form-control mr-sm-2" type="text" placeholder="Search">
+                            <button id="searchAll" class="btn btn-outline-danger my-2 my-sm-0" type="submit">Search</button>
+                            <div class="dropdown">
+                                <div class="serche-result dropdown-menu">
+
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+                        @foreach (Soc.Models.NewsFeed news in newses)
+                        {
+                            if (owners.Count != 0)
+                            {
+
+                                Soc.Models.NewsFeed feedOwner = owners.Where(m => m.id == news.on_feed_id).ToList().First();
+                                string source = "";
+                                if (feedOwner.photos != "" && feedOwner.photos != null)
+                                {
+                                    source = Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content(feedOwner.photos);
+                                }
+                                else if (feedOwner.videos != "" && feedOwner.videos != null)
+                                {
+                                    source = Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content(feedOwner.videos);
+                                }
+
+                                if (feedOwner.contetnfeed != null && feedOwner.photos == null && feedOwner.videos == null)
+                                {
+                            <div class="container container-@feedOwner.id mt-2" style="border:2px solid whitesmoke;z-index:1;" >
+                                <div class="row">
+                                    <p class="col-10">
+                                        <strong ><a href="/Chrono/index/@news.user_id">@news.user.name @news.user.surname</a> </strong>
+                                         send feedback on <a href="/Chrono/index/@feedOwner.user_id">@feedOwner.user.name @feedOwner.user.surname</a>'s <br />
+                                        post he think that is contain <label>@news.contetnfeed</label> content
+                                    </p>
+                                    <div class="dropdown ml-auto col-2">
+                                        <a data-toggle="dropdown">
+                                            <img class="ml-auto" data-id="@feedOwner.id" style="height:28px;width:28px;" src="~/Content/Backgrounds/share.png" />
+                                        </a>
+                                        <div class="dropdown-menu mr-5">
+                                              <a href="" data-toggle="modal" class="deleted-feed" data-id="@feedOwner.id" data-target="#myModalDelete">delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <label>@feedOwner.contetnfeed</label> 
+                            </div>
+                                }
+                                else if (feedOwner.photos != null)
+                                {
+                                <div class="container container-@news.id mt-2" style="border:2px solid whitesmoke;z-index:1">
+                                    <div class="row">
+                                        <p class="col-10">
+                                            <strong ><a href="/Chrono/index/@news.user_id">@news.user.name @news.user.surname</a> </strong>
+                                            send feedback <br />on <a href="/Chrono/index/@feedOwner.user_id">@feedOwner.user.name @feedOwner.user.surname</a>'s <br />
+                                            post he think that is
+                                            <label>@news.contetnfeed</label>
+                                        </p>
+                                        <div class="dropdown ml-auto col-2">
+                                            <a data-toggle="dropdown">
+                                                <img class="ml-auto" data-id="@feedOwner.id" style="height:28px;width:28px;" src="~/Content/Backgrounds/share.png" />
+                                            </a>
+                                            <div class="dropdown-menu mr-5">
+                                                <a href="" data-toggle="modal" class="deleted-feed" data-id="@feedOwner.id" data-target="#myModalDelete">delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a class="viewer" data-feedId="@feedOwner.id" data-id="@feedOwner.user_id" data-toggle="modal" data-target="#myModal1">
+                                        <img class="w-100 m-auto" style="height:500px;" src="@source" />
+                                    </a>
+                                </div>
+                                }
+                                else if (news.videos != null)
+                                {
+                                <div class="container container-@news.id mt-2" style="border:2px solid whitesmoke;z-index:1">
+                                    <div class="row">
+                                        <p class="col-10">
+                                            <strong><a href="/Chrono/index/@news.user_id">@news.user.name @news.user.surname</a> </strong>
+                                            send feedback <br />on <a href="/Chrono/index/@feedOwner.user_id">@feedOwner.user.name @feedOwner.user.surname</a>'s <br />
+                                            post
+                                            <label>@news.contetnfeed</label>
+                                        </p>
+                                        <div class="dropdown ml-auto col-2">
+                                            <a data-toggle="dropdown">
+                                                <img class="ml-auto" data-id="@feedOwner.id" style="height:28px;width:28px;" src="~/Content/Backgrounds/share.png" />
+                                            </a>
+                                            <div class="dropdown-menu mr-5">
+                                                <a href="" data-toggle="modal" class="deleted-feed" data-id="@feedOwner.id" data-target="#myModalDelete">delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a class="viewer" data-feedId="@feedOwner.id" data-id="@feedOwner.user_id" data-toggle="modal" data-target="#myModal1">
+                                        <video class="w-100" style="height:400px;" src="@source" />
+                                    </a>
+                                </div>
+                                }
+                            }
+                        }
+                </div>
+            </div>
+<!--add advert photo-->>
+    <div class="modal fade" id="advModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Share with friends</h4>
+                    <button type="button" class="data-close close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="row picture-area">
+
+                    </div>
+                    <input type="number" class="input-cost" name="cost" placeholder="cost" value="" />
+                    <div class="image-upload">
+                        <input type="url" class="adv-url" name="" value="" />
+                        <input id="file-input-adv" type="file" name="send"  />
+                    </div>
+                    <div class="share-area">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    
+     <!-- modal for admin send noif-->
+    <div class="modal" id="myModalDelete">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">what the reason</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="optradio" value="1">illegal Contetn
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="optradio" value="2">naked Content
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="optradio" value="3">Fake photo
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="optradio" value="4">copyright
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="optradio" value="5">other
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer" style="z-index:300;">
+                    <button id="delete-and-send" type="button" class="btn btn-danger">confirm</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--photo viewer-->
+    <div class="container">
+        <!-- Modal -->
+        <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div id="myCarousel" class="carousel slide" data-interval="false" data-ride="carousel" style="height:100%;">
+
+                                <!-- Wrapper for slides -->
+                                <div class="carousel-inner">
+                                </div>
+                                <!-- Left and right controls -->
+                                <a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
+                                    <span class="carousel-control-prev-icon"></span>
+                                </a>
+                                <a class="carousel-control-next" href="#myCarousel" data-slide="next">
+                                    <span class="carousel-control-next-icon"></span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="modal-body inline">
+                                <div class="row">
+                                    <div class="user_profile col-3">
+
+                                    </div>
+                                    <div class="user_name col-9">
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="for-comment" style="height:300px; overflow:scroll;overflow-x:hidden;">
+
+                                </div>
+                                <input placeholder="Comment" type="text" class="comment-input form-control w-100" />
+                                <button class="commentOn btn btn-sm btn-primary pull-right">comment</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
