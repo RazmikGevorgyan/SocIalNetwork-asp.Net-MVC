@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
 using Owin;
+using System.Data.Entity;
 
 namespace Soc.Controllers
 {
@@ -28,13 +29,13 @@ namespace Soc.Controllers
         }
 
     [HttpPost]
-        public ActionResult Index(Log log)
+        public async Task<ActionResult> Index(Log log)
         {
             string login = log.login;
             string password = log.password;
             passwordHash hash = new passwordHash();
             List<user> auth = new List<user>();
-            auth =(from item in context.users where item.login == login  select item).ToList();
+            auth =await (from item in context.users where item.login == login  select item).ToListAsync();
             if (auth.Count == 0 || hash.Validate(password, auth[0].password) == false)
             {
                 if (auth[0] != null)
@@ -142,7 +143,7 @@ namespace Soc.Controllers
         }
 
         [HttpPost]
-        public ActionResult Signup(userValidate valid)
+        public async Task<ActionResult> Signup(userValidate valid)
         {
            
             List<string> dbo = new List<string>();
@@ -181,9 +182,9 @@ namespace Soc.Controllers
                     Session["token"] = null;
                 }
                 usr.email = valid.Email;
-                List<user> users = (from item in context.users where 
+                List<user> users =await (from item in context.users where 
                                     item.email == valid.Email && item.from_facebook != 1
-                                    select item).ToList();
+                                    select item).ToListAsync();
                 if (users.Count > 0)
                 {
                     ViewBag.error = "there is already have user with that Email";

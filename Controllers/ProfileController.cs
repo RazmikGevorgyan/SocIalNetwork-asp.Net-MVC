@@ -1,6 +1,9 @@
-﻿using Soc.Models;
+﻿using Owin;
+using Soc.Models;
+using Social.Controllers;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,8 +12,6 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Script.Serialization;
-using Owin;
-using Social.Controllers;
 
 namespace Soc.Controllers
 {
@@ -25,7 +26,7 @@ namespace Soc.Controllers
             this.db = new socialEntities();
         }
         // GET: Profile
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             string iD;
             ViewBag.users = db.users;
@@ -42,19 +43,19 @@ namespace Soc.Controllers
                 ViewBag.error = TempData["message"];
             }
             user us = Session["User"+iD] as user;
-            List<messenger1> mes = db.messenger1.Where(m => m.to_user_id == us.id).ToList();
+            List<messenger1> mes =await db.messenger1.Where(m => m.to_user_id == us.id).ToListAsync();
             ViewBag.messages = mes;
-            List<follower> folowers1 = db.followers.Where(f => f.user_id == us.id).ToList();
+            List<follower> folowers1 =await db.followers.Where(f => f.user_id == us.id).ToListAsync();
             ViewBag.folowers = folowers1;
-            List<friend> friends = db.friends.Where(m => m.user_id == us.id || m.friend_user_id==us.id).ToList();
+            List<friend> friends =await db.friends.Where(m => m.user_id == us.id || m.friend_user_id==us.id).ToListAsync();
             ViewBag.friends = friends;
-            List<notification> notif = (from item in db.notifications where item.user_id == us.id select item).ToList();
+            List<notification> notif =await (from item in db.notifications where item.user_id == us.id select item).ToListAsync();
             notif.OrderByDescending(m => m.datetime);
             ViewBag.notifications = notif;
-            List<follower> folowers = db.followers.Where(f => f.follower_id == us.id).ToList();
+            List<follower> folowers =await db.followers.Where(f => f.follower_id == us.id).ToListAsync();
             ViewBag.followerOf = folowers;
             int unread=0;
-            List<like> likes = db.likes.Where(l => l.liker_id == us.id).ToList();
+            List<like> likes =await db.likes.Where(l => l.liker_id == us.id).ToListAsync();
             ViewBag.likes = likes;
             foreach (notification not in db.notifications)
             {
@@ -65,15 +66,15 @@ namespace Soc.Controllers
             }
             ViewBag.unreadNotif = unread;
             List < int?> folow = new List<int?>();
-            folow = (from item in db.followers where item.follower_id == us.id select item.user_id).ToList();
+            folow =await (from item in db.followers where item.follower_id == us.id select item.user_id).ToListAsync();
             folow.Add(us.id);
             List<NewsFeed> feed = this.GetNews(folow);
-            feed=feed.OrderByDescending(m => m.dateTime).ToList();
-            ViewBag.currentuser = db.users.Find(us.id);
+            feed= feed.OrderByDescending(m => m.dateTime).ToList();
+            ViewBag.currentuser =await db.users.FindAsync(us.id);
             ViewBag.NewsFeed = feed;
-            List<NewsFeed> allfeed = db.NewsFeeds.ToList();
+            List<NewsFeed> allfeed =await db.NewsFeeds.ToListAsync();
             ViewBag.allfeed = allfeed;
-            ViewBag.advert = db.adverts.ToList() as List<advert>;
+            ViewBag.advert =await db.adverts.ToListAsync() as List<advert>;
             List<user> onChat = new List<user>();
             foreach (messenger1 mese in db.messenger1)
             {
@@ -95,7 +96,7 @@ namespace Soc.Controllers
             user us = Session["User" + currid] as user;
             return View();
         }
-        private List<NewsFeed> GetNews(List<int?> imFolowerOf)
+        private  List<NewsFeed> GetNews(List<int?> imFolowerOf)
         {
             List<NewsFeed> news = new List<NewsFeed>();
             foreach(int i in imFolowerOf)
@@ -111,23 +112,23 @@ namespace Soc.Controllers
            
             return news;
         }
-        public ActionResult Messenger()
+        public async  Task<ActionResult> Messenger()
         {
             string currid = Request.Params["id"].ToString();
             user us = Session["User" + currid] as user;
-            List<messenger1> mes = db.messenger1.Where(m => m.to_user_id == us.id).ToList();
+            List<messenger1> mes =await db.messenger1.Where(m => m.to_user_id == us.id).ToListAsync();
             ViewBag.messages = mes;
-            List<follower> folowers1 = db.followers.Where(f => f.user_id == us.id).ToList();
+            List<follower> folowers1 =await db.followers.Where(f => f.user_id == us.id).ToListAsync();
             ViewBag.folowers = folowers1;
-            List<friend> friends = db.friends.Where(m => m.user_id == us.id || m.friend_user_id == us.id).ToList();
+            List<friend> friends =await db.friends.Where(m => m.user_id == us.id || m.friend_user_id == us.id).ToListAsync();
             ViewBag.friends = friends;
-            List<notification> notif = (from item in db.notifications where item.user_id == us.id select item).ToList();
+            List<notification> notif =await (from item in db.notifications where item.user_id == us.id select item).ToListAsync();
             notif.OrderByDescending(m => m.datetime);
             ViewBag.notifications = notif;
-            List<follower> folowers = db.followers.Where(f => f.follower_id == us.id).ToList();
+            List<follower> folowers =await db.followers.Where(f => f.follower_id == us.id).ToListAsync();
             ViewBag.followerOf = folowers;
             int unread = 0;
-            List<like> likes = db.likes.Where(l => l.liker_id == us.id).ToList();
+            List<like> likes =await db.likes.Where(l => l.liker_id == us.id).ToListAsync();
             ViewBag.likes = likes;
             foreach (notification not in db.notifications)
             {
@@ -138,15 +139,15 @@ namespace Soc.Controllers
             }
             ViewBag.unreadNotif = unread;
             List<int?> folow = new List<int?>();
-            folow = (from item in db.followers where item.follower_id == us.id select item.user_id).ToList();
+            folow =await (from item in db.followers where item.follower_id == us.id select item.user_id).ToListAsync();
             folow.Add(us.id);
             List<NewsFeed> feed = this.GetNews(folow);
             feed = feed.OrderByDescending(m => m.dateTime).ToList();
-            ViewBag.currentuser = db.users.Find(us.id);
+            ViewBag.currentuser =await db.users.FindAsync(us.id);
             ViewBag.NewsFeed = feed;
-            List<NewsFeed> allfeed = db.NewsFeeds.ToList();
+            List<NewsFeed> allfeed =await db.NewsFeeds.ToListAsync();
             ViewBag.allfeed = allfeed;
-            ViewBag.advert = db.adverts.ToList() as List<advert>;
+            ViewBag.advert =await db.adverts.ToListAsync() as List<advert>;
             List<user> onChat = new List<user>();
             foreach (messenger1 mese in db.messenger1)
             {
@@ -162,10 +163,10 @@ namespace Soc.Controllers
             onChat = onChat.Distinct().ToList();
             ViewBag.onchat = onChat;
             user admins = db.users.Where(m => m.stat == 1).ToList().First();
-            ViewBag.messages = db.messenger1.Where(m => m.to_user_id == us.id || m.from_user_id == us.id).ToList();
+            ViewBag.messages =await db.messenger1.Where(m => m.to_user_id == us.id || m.from_user_id == us.id).ToListAsync();
             return View();
         }
-        public JsonResult SearcheResult()
+        public async Task<JsonResult> SearcheResult()
         {
             string currid = Request.Params["id"].ToString();
             user us = Session["User" + currid] as user;
@@ -184,7 +185,7 @@ namespace Soc.Controllers
                 }
             }
             onChat = onChat.Distinct().ToList();
-            List<user> users = onChat.Where(user => user.name.StartsWith(cont)).Distinct().ToList();
+            List<user> users =onChat.Where(user => user.name.StartsWith(cont)).Distinct().ToList();
             var result = new LinkedList<object>();
             foreach (var user in users)
             {
@@ -200,7 +201,7 @@ namespace Soc.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(int id)
+        public async Task<ActionResult> Index(int id)
         {
             //add your shares into your newsfeed 
             user us = Session["User"+id.ToString()] as user;

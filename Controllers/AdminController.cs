@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using Owin;
 using System.IO;
+using System.Data.Entity;
 using System.Threading.Tasks;
 
 namespace Soc.Controllers
@@ -18,7 +19,7 @@ namespace Soc.Controllers
             this.db =new socialEntities();
         }
         // GET: Admin
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             string id;
             if (TempData["id"]!=null)
@@ -29,9 +30,9 @@ namespace Soc.Controllers
                 id = Request.Params["id"];
             }
             user us = Session["User"+id] as user;
-            List<NewsFeed> feed = (from item in db.NewsFeeds
-                                   where item.feedState_id == 8
-                                   select item).ToList();
+           List <NewsFeed> feed = await (from item in db.NewsFeeds
+                                        where item.feedState_id == 8
+                                        select item).ToListAsync();
             feed = feed.OrderByDescending(m => m.dateTime).ToList();
             List<NewsFeed> feedOwners = new List<NewsFeed>();
             foreach (NewsFeed fe in feed)
@@ -50,13 +51,14 @@ namespace Soc.Controllers
             ViewBag.currentuser = us;
             ViewBag.all = db.users;
             ViewBag.messages = db.messenger1.Where(m => m.to_user_id == us.id).ToList();
+           
             ViewBag.unreadMessages = db.messenger1.Where(m => m.to_user_id ==us.id && m.status == 1).ToList().Count;
             return View();
         }
-        public void GetFeedback(int id)
+        public async void GetFeedback(int id)
         {
             NewsFeed feed = new NewsFeed();
-            NewsFeed newsfeed = db.NewsFeeds.Find(id);
+            NewsFeed newsfeed =await db.NewsFeeds.FindAsync(id);
             string currid = Request.Params["id"].ToString();
             user us = Session["User"+currid] as user;
             int val = int.Parse(Request.Params["value"].ToString());
@@ -133,14 +135,14 @@ namespace Soc.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public void AddAdv(string id)
+        public async void AddAdv(string id)
         {
             int advId = int.Parse(id);
             string src = Request.Params["src"].ToString();
             string cost = Request.Params["cost"].ToString();
             string url = Request.Params["url"].ToString();
             url = url.Replace("/,/Admin/AddAdv/1", "");
-            List<advert> ads = (from item in db.adverts where item.advNo == advId && item.status == 1 select item).ToList();
+            List<advert> ads =await (from item in db.adverts where item.advNo == advId && item.status == 1 select item).ToListAsync();
             if (ads.Count != 0)
             {
                 var adv = new advert { id = ads[0].id, advert1 = src,cost=int.Parse(cost),datetime=DateTime.Now,url=url};
@@ -168,14 +170,14 @@ namespace Soc.Controllers
             }
         }
       
-        public ActionResult Messenger()
+        public async Task<ActionResult> Messenger()
         {
             string currid = Request.Params["id"].ToString();
             user usr = Session["User"+currid] as user;
-            user admins = db.users.Where(m => m.stat == 1).ToList().First();
-            ViewBag.messages = db.messenger1.Where(m => m.to_user_id == admins.id || m.from_user_id == admins.id).ToList();
+            user admins =db.users.Where(m => m.stat == 1).ToList().First();
+            ViewBag.messages =await db.messenger1.Where(m => m.to_user_id == admins.id || m.from_user_id == admins.id).ToListAsync();
             List<user> notMe=new List<user>();
-            List<int?> usersId = db.messenger1.Where(mes => mes.to_user_id == usr.id).Select(m => m.from_user_id).ToList();
+            List<int?> usersId =await db.messenger1.Where(mes => mes.to_user_id == usr.id).Select(m => m.from_user_id).ToListAsync();
             foreach (int i in usersId.Distinct())
             {
                 notMe.Add(db.users.Find(i));
@@ -183,10 +185,10 @@ namespace Soc.Controllers
             ViewBag.notme = notMe;
             return View();
         }
-        public void Block(string id)
+        public async void Block(string id)
         {
             int iD = int.Parse(id);
-            user usr= db.users.Find(iD);
+            user usr=await db.users.FindAsync(iD);
             var user = new user { id = iD, is_blocked = 1 };
             using (var db = new socialEntities())
             {
@@ -195,10 +197,10 @@ namespace Soc.Controllers
                 db.SaveChanges();
             }
         }
-        public void UnBlock(string id)
+        public async void UnBlock(string id)
         {
             int iD = int.Parse(id);
-            user usr = db.users.Find(iD);
+            user usr =await db.users.FindAsync(iD);
             var user = new user { id = iD, is_blocked = 0 };
             using (var db = new socialEntities())
             {
@@ -207,14 +209,14 @@ namespace Soc.Controllers
                 db.SaveChanges();
             }
         }
-        public JsonResult SearcheResult()
+        public async Task<JsonResult> SearcheResult()
         {
             string currid = Request.Params["id"].ToString();
             user us = Session["User" + currid] as user;
             string cont;
             cont = Convert.ToString(Request.Params["text"]);
-            List<user> mesUsers = db.messenger1.Where(m => m.to_user_id == us.id).Select(m=>m.user).Distinct().ToList();
-            List<user> users = mesUsers.Where(user => user.name.StartsWith(cont)).Distinct().ToList();
+            List<user> mesUsers =await db.messenger1.Where(m => m.to_user_id == us.id).Select(m=>m.user).Distinct().ToListAsync();
+            List<user> users =mesUsers.Where(user => user.name.StartsWith(cont)).Distinct().ToList();
             var result = new LinkedList<object>();
             foreach (var user in users)
             {

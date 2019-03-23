@@ -356,7 +356,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="Controllers\App_Data\" />
     <Folder Include="Views\autoNptifSender\" />
     <Folder Include="Views\Auto_Notification_Sender\" />
     <Folder Include="Views\FacebookLogin\" />

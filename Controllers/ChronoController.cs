@@ -19,40 +19,39 @@ namespace Soc.Controllers
         {
             this.db = new socialEntities();
         }
-        public ActionResult Index(int id)
+        public async Task<ActionResult> Index(int id)
         {
             string currId;
             if (TempData["id"] != null)
             {
                 currId = TempData["id"].ToString(); 
-
             }
             else 
             {
                 currId= Request.Params["id"].ToString();
             }
 
-            List<NewsFeed> MyAll = db.NewsFeeds.Where(m => m.user_id == id).ToList();
-            user toUser = db.users.Find(id);
-            List<friend> friends = db.friends.Where(fr => fr.friend_user_id == toUser.id || fr.user_id == toUser.id).ToList();
+            List<NewsFeed> MyAll =await db.NewsFeeds.Where(m => m.user_id == id).ToListAsync();
+            user toUser =await db.users.FindAsync(id);
+            List<friend> friends =await db.friends.Where(fr => fr.friend_user_id == toUser.id || fr.user_id == toUser.id).ToListAsync();
             ViewBag.friends = friends;
             user user = Session["User"+currId] as user;
-            ViewBag.currentuser = db.users.Find(user.id);
-            List<friend> myfriend= db.friends.Where(m => m.friend_user_id == user.id || m.user_id == user.id).ToList();
+            ViewBag.currentuser =await db.users.FindAsync(user.id);
+            List<friend> myfriend=await db.friends.Where(m => m.friend_user_id == user.id || m.user_id == user.id).ToListAsync();
             ViewBag.myFriends = myfriend;
             ViewBag.user = toUser;
             ViewBag.photos = MyAll;
-            List<NewsFeed> feed = db.NewsFeeds.Where(fe => fe.user_id ==id && fe.feedState_id!=8).ToList();
-            feed = feed.OrderByDescending(m => m.dateTime).ToList();
+            List<NewsFeed> feed =await db.NewsFeeds.Where(fe => fe.user_id ==id && fe.feedState_id!=8).ToListAsync();
+            feed =feed.OrderByDescending(m => m.dateTime).ToList();
             ViewBag.feed = feed;
-            List<like> likes = db.likes.Where(l => l.liker_id == user.id).ToList();
+            List<like> likes =await db.likes.Where(l => l.liker_id == user.id).ToListAsync();
             ViewBag.likes = likes;
-            List<follower> folowers = db.followers.Where(f => f.follower_id == user.id && f.user_id==id).ToList();
+            List<follower> folowers =await db.followers.Where(f => f.follower_id == user.id && f.user_id==id).ToListAsync();
             ViewBag.followerOf = folowers;
-            List<notification> notif = (from item in db.notifications where item.user_id == user.id select item).ToList();
+            List<notification> notif =await (from item in db.notifications where item.user_id == user.id select item).ToListAsync();
             notif=notif.OrderByDescending(n => n.datetime).ToList();
             ViewBag.notifications = notif;
-            List<NewsFeed> allfeed = db.NewsFeeds.Where(m=>m.feedState_id!=8).ToList();
+            List<NewsFeed> allfeed =await db.NewsFeeds.Where(m=>m.feedState_id!=8).ToListAsync();
             ViewBag.allfeed = allfeed;
             List<user> onChat = new List<user>(); 
             foreach(messenger1 mes in db.messenger1)
@@ -79,11 +78,11 @@ namespace Soc.Controllers
             ViewBag.unreadNotif = unread;
             return View();
         }
-        public JsonResult GetFriends(int id)
+        public async Task<JsonResult> GetFriends(int id)
         {
             string currId = Request.Params["id"];
             user us = Session["User"+currId] as user;
-            List<friend> friends = db.friends.Where(m => m.friend_user_id==id || m.user_id==id).ToList();
+            List<friend> friends =await db.friends.Where(m => m.friend_user_id==id || m.user_id==id).ToListAsync();
             var result = new LinkedList<object>();
             foreach (var friend in friends)
             {
@@ -109,9 +108,9 @@ namespace Soc.Controllers
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetAbout(int id)
+        public async Task<JsonResult> GetAbout(int id)
         {
-            user us = db.users.Find(id);
+            user us =await db.users.FindAsync(id);
             var result = new object();
                     result=(new
                     {
@@ -125,9 +124,9 @@ namespace Soc.Controllers
                     });
                 return Json(result, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetPhoto(int id)
+        public async Task<JsonResult> GetPhoto(int id)
         {
-            List<NewsFeed> photos = db.NewsFeeds.Where(m => m.user_id == id && m.photos!=null && m.feedState_id==1).ToList();
+            List<NewsFeed> photos =await db.NewsFeeds.Where(m => m.user_id == id && m.photos!=null && m.feedState_id==1).ToListAsync();
             var result = new LinkedList<object>();
             foreach (var photo in photos)
             {
@@ -142,9 +141,9 @@ namespace Soc.Controllers
            }
                 return Json(result, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetOnePhoto(int id)
+        public async Task<JsonResult> GetOnePhoto(int id)
         {
-            NewsFeed feed = db.NewsFeeds.Find(id);
+            NewsFeed feed =await db.NewsFeeds.FindAsync(id);
             var result = new object();
             result = new
             {
@@ -158,12 +157,12 @@ namespace Soc.Controllers
             };
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetPrevItem(int id)
+        public async Task<JsonResult> GetPrevItem(int id)
         {
             var result = new object();
-            NewsFeed feed = db.NewsFeeds.Find(id);
+            NewsFeed feed =await db.NewsFeeds.FindAsync(id);
             NewsFeed newFedd = new NewsFeed();
-            List<NewsFeed> feeds = db.NewsFeeds.Where(m => m.user_id == feed.user_id && (m.photos!=null || m.videos!=null)).ToList();
+            List<NewsFeed> feeds =await db.NewsFeeds.Where(m => m.user_id == feed.user_id && (m.photos!=null || m.videos!=null)).ToListAsync();
             if (feeds.Count > 1)
             {
                 if (feed.id == feeds.First().id)
@@ -201,12 +200,12 @@ namespace Soc.Controllers
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetNextItem(int id)
+        public async Task<JsonResult> GetNextItem(int id)
         {
             var result = new object();
-            NewsFeed feed = db.NewsFeeds.Find(id);
+            NewsFeed feed =await db.NewsFeeds.FindAsync(id);
             NewsFeed newFedd = new NewsFeed();
-            List<NewsFeed> feeds = db.NewsFeeds.Where(m => m.user_id == feed.user_id && (m.photos != null || m.videos != null)).ToList();
+            List<NewsFeed> feeds =await db.NewsFeeds.Where(m => m.user_id == feed.user_id && (m.photos != null || m.videos != null)).ToListAsync();
             if (feeds.Count > 1)
             {
                 if (feed.id == feeds.Last().id)
@@ -291,11 +290,11 @@ namespace Soc.Controllers
                 }
             }
         }
-        public void ChangeProfile(int id)
+        public async void  ChangeProfile(int id)
         {
             string currid = Request.Params["id"].ToString();
             user us = Session["User" + currid] as user;
-            NewsFeed feed = db.NewsFeeds.Find(id);
+            NewsFeed feed =await db.NewsFeeds.FindAsync(id);
             var user = new user { id = us.id, profile_photo = feed.photos };
             using (var db = new socialEntities())
             {
@@ -318,11 +317,11 @@ namespace Soc.Controllers
                 }
             }
         }
-        public void SharePost(int id)
+        public async void SharePost(int id)
         {
             string currid = Request.Params["id"].ToString();
             user us = Session["User" + currid] as user;
-            NewsFeed feed = db.NewsFeeds.Find(id);
+            NewsFeed feed =await db.NewsFeeds.FindAsync(id);
             NewsFeed myfeed = new NewsFeed();
             myfeed.dateTime = DateTime.Now;
             myfeed.user_id = us.id;
@@ -343,11 +342,11 @@ namespace Soc.Controllers
             }
             db.SaveChanges();
         }
-        public void SharePhoto(int id)
+        public async void SharePhoto(int id)
         {
             string currid = Request.Params["id"].ToString();
             user us = Session["User"+currid] as user;
-            NewsFeed feed = db.NewsFeeds.Find(id);
+            NewsFeed feed =await db.NewsFeeds.FindAsync(id);
             NewsFeed myfeed = new NewsFeed();
             myfeed.dateTime = DateTime.Now;
             myfeed.user_id = us.id;
@@ -376,11 +375,11 @@ namespace Soc.Controllers
             }
             db.SaveChanges();
         }
-        public void ShareUrl(int id)
+        public async void ShareUrl(int id)
         {
             string currid = Request.Params["id"].ToString();
             user us = Session["User" + currid] as user;
-            NewsFeed feed = db.NewsFeeds.Find(id);
+            NewsFeed feed =await db.NewsFeeds.FindAsync(id);
             NewsFeed myfeed = new NewsFeed();
             myfeed.dateTime = DateTime.Now;
             myfeed.user_id = us.id;
@@ -408,11 +407,11 @@ namespace Soc.Controllers
             }
             db.SaveChanges();
         }
-        public void ShareViedo(int id)
+        public async void ShareViedo(int id)
         {
             string currid = Request.Params["id"].ToString();
             user us = Session["User" + currid] as user;
-            NewsFeed feed = db.NewsFeeds.Find(id);
+            NewsFeed feed =await db.NewsFeeds.FindAsync(id);
             NewsFeed myfeed = new NewsFeed();
             myfeed.dateTime = DateTime.Now;
             myfeed.user_id = us.id;
@@ -441,11 +440,11 @@ namespace Soc.Controllers
             }
             db.SaveChanges();
         }
-        public void DeleteFeed(int id)
+        public async void DeleteFeed(int id)
         {
             string currid = Request.Params["id"].ToString();
             user us = Session["User" + currid] as user;
-            NewsFeed feed = db.NewsFeeds.Find(id);
+            NewsFeed feed =await db.NewsFeeds.FindAsync(id);
             if (us.stat == 1)
             {
                 int val = int.Parse(Request.Params["value"].ToString());
@@ -477,7 +476,7 @@ namespace Soc.Controllers
                 db.notifications.Add(not);
                 db.SaveChanges();
             }
-            List<NewsFeed> allfeeds = db.NewsFeeds.Where(m => m.on_feed_id == id).ToList();
+            List<NewsFeed> allfeeds =await db.NewsFeeds.Where(m => m.on_feed_id == id).ToListAsync();
             db.NewsFeeds.RemoveRange(allfeeds);
             db.NewsFeeds.Remove(feed);
             db.SaveChanges();
@@ -495,9 +494,9 @@ namespace Soc.Controllers
             }
             catch (Exception e) { }
         }
-        public void deleteFeedWithPhoto(int id)
+        public async void deleteFeedWithPhoto(int id)
         {
-            NewsFeed feed = db.NewsFeeds.Find(id);
+            NewsFeed feed =await db.NewsFeeds.FindAsync(id);
             if (feed != null)
             {
                 db.NewsFeeds.Remove(feed);
