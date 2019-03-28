@@ -45,11 +45,11 @@ namespace Soc.Controllers
             user us = Session["User"+iD] as user;
             List<messenger1> mes =await db.messenger1.Where(m => m.to_user_id == us.id).ToListAsync();
             ViewBag.messages = mes;
-            List<follower> folowers1 =await db.followers.Where(f => f.user_id == us.id).ToListAsync();
+            List<follower> folowers1 = await db.followers.Where( f => f.user_id == us.id).ToListAsync();
             ViewBag.folowers = folowers1;
             List<friend> friends =await db.friends.Where(m => m.user_id == us.id || m.friend_user_id==us.id).ToListAsync();
             ViewBag.friends = friends;
-            List<notification> notif =await (from item in db.notifications where item.user_id == us.id select item).ToListAsync();
+            List<notification> notif =(from item in db.notifications where item.user_id == us.id select item).ToList();
             notif.OrderByDescending(m => m.datetime);
             ViewBag.notifications = notif;
             List<follower> folowers =await db.followers.Where(f => f.follower_id == us.id).ToListAsync();
@@ -66,7 +66,7 @@ namespace Soc.Controllers
             }
             ViewBag.unreadNotif = unread;
             List < int?> folow = new List<int?>();
-            folow =await (from item in db.followers where item.follower_id == us.id select item.user_id).ToListAsync();
+            folow =(from item in db.followers where item.follower_id == us.id select item.user_id).ToList();
             folow.Add(us.id);
             List<NewsFeed> feed = this.GetNews(folow);
             feed= feed.OrderByDescending(m => m.dateTime).ToList();
