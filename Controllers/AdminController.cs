@@ -55,10 +55,10 @@ namespace Soc.Controllers
             ViewBag.unreadMessages = db.messenger1.Where(m => m.to_user_id ==us.id && m.status == 1).ToList().Count;
             return View();
         }
-        public async void GetFeedback(int id)
+        public void GetFeedback(int id)
         {
             NewsFeed feed = new NewsFeed();
-            NewsFeed newsfeed =await db.NewsFeeds.FindAsync(id);
+            NewsFeed newsfeed =db.NewsFeeds.Find(id);
             string currid = Request.Params["id"].ToString();
             user us = Session["User"+currid] as user;
             int val = int.Parse(Request.Params["value"].ToString());

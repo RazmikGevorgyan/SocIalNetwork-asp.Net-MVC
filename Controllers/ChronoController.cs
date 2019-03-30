@@ -290,11 +290,11 @@ namespace Soc.Controllers
                 }
             }
         }
-        public async void  ChangeProfile(int id)
+        public  void  ChangeProfile(int id)
         {
             string currid = Request.Params["id"].ToString();
             user us = Session["User" + currid] as user;
-            NewsFeed feed =await db.NewsFeeds.FindAsync(id);
+            NewsFeed feed = db.NewsFeeds.Find(id);
             var user = new user { id = us.id, profile_photo = feed.photos };
             using (var db = new socialEntities())
             {
@@ -317,11 +317,11 @@ namespace Soc.Controllers
                 }
             }
         }
-        public async void SharePost(int id)
+        public void SharePost(int id)
         {
             string currid = Request.Params["id"].ToString();
             user us = Session["User" + currid] as user;
-            NewsFeed feed =await db.NewsFeeds.FindAsync(id);
+            NewsFeed feed =db.NewsFeeds.Find(id);
             NewsFeed myfeed = new NewsFeed();
             myfeed.dateTime = DateTime.Now;
             myfeed.user_id = us.id;
@@ -342,11 +342,11 @@ namespace Soc.Controllers
             }
             db.SaveChanges();
         }
-        public async void SharePhoto(int id)
+        public void SharePhoto(int id)
         {
             string currid = Request.Params["id"].ToString();
             user us = Session["User"+currid] as user;
-            NewsFeed feed =await db.NewsFeeds.FindAsync(id);
+            NewsFeed feed =db.NewsFeeds.Find(id);
             NewsFeed myfeed = new NewsFeed();
             myfeed.dateTime = DateTime.Now;
             myfeed.user_id = us.id;
@@ -375,11 +375,11 @@ namespace Soc.Controllers
             }
             db.SaveChanges();
         }
-        public async void ShareUrl(int id)
+        public void ShareUrl(int id)
         {
             string currid = Request.Params["id"].ToString();
             user us = Session["User" + currid] as user;
-            NewsFeed feed =await db.NewsFeeds.FindAsync(id);
+            NewsFeed feed = db.NewsFeeds.Find(id);
             NewsFeed myfeed = new NewsFeed();
             myfeed.dateTime = DateTime.Now;
             myfeed.user_id = us.id;
@@ -440,11 +440,11 @@ namespace Soc.Controllers
             }
             db.SaveChanges();
         }
-        public async void DeleteFeed(int id)
+        public void DeleteFeed(int id)
         {
             string currid = Request.Params["id"].ToString();
             user us = Session["User" + currid] as user;
-            NewsFeed feed =await db.NewsFeeds.FindAsync(id);
+            NewsFeed feed =db.NewsFeeds.Find(id);
             if (us.stat == 1)
             {
                 int val = int.Parse(Request.Params["value"].ToString());
@@ -476,7 +476,7 @@ namespace Soc.Controllers
                 db.notifications.Add(not);
                 db.SaveChanges();
             }
-            List<NewsFeed> allfeeds =await db.NewsFeeds.Where(m => m.on_feed_id == id).ToListAsync();
+            List<NewsFeed> allfeeds =db.NewsFeeds.Where(m => m.on_feed_id == id).ToList();
             db.NewsFeeds.RemoveRange(allfeeds);
             db.NewsFeeds.Remove(feed);
             db.SaveChanges();
@@ -494,9 +494,9 @@ namespace Soc.Controllers
             }
             catch (Exception e) { }
         }
-        public async void deleteFeedWithPhoto(int id)
+        public void deleteFeedWithPhoto(int id)
         {
-            NewsFeed feed =await db.NewsFeeds.FindAsync(id);
+            NewsFeed feed =db.NewsFeeds.Find(id);
             if (feed != null)
             {
                 db.NewsFeeds.Remove(feed);
