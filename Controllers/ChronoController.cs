@@ -48,7 +48,7 @@ namespace Soc.Controllers
             ViewBag.likes = likes;
             List<follower> folowers =await db.followers.Where(f => f.follower_id == user.id && f.user_id==id).ToListAsync();
             ViewBag.followerOf = folowers;
-            List<notification> notif =await (from item in db.notifications where item.user_id == user.id select item).ToListAsync();
+            List<notification> notif = (from item in db.notifications where item.user_id == user.id select item).ToList();
             notif=notif.OrderByDescending(n => n.datetime).ToList();
             ViewBag.notifications = notif;
             List<NewsFeed> allfeed =await db.NewsFeeds.Where(m=>m.feedState_id!=8).ToListAsync();

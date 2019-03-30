@@ -30,9 +30,9 @@ namespace Soc.Controllers
                 id = Request.Params["id"];
             }
             user us = Session["User"+id] as user;
-           List <NewsFeed> feed = await (from item in db.NewsFeeds
+           List <NewsFeed> feed = (from item in db.NewsFeeds
                                         where item.feedState_id == 8
-                                        select item).ToListAsync();
+                                        select item).ToList();
             feed = feed.OrderByDescending(m => m.dateTime).ToList();
             List<NewsFeed> feedOwners = new List<NewsFeed>();
             foreach (NewsFeed fe in feed)
@@ -91,7 +91,7 @@ namespace Soc.Controllers
             db.SaveChanges();
         }
         [HttpPost]
-        public async Task<JsonResult> UploadFile()
+        public JsonResult UploadFile()
         {
             string currid = Request.Params["id"].ToString();
             user us = Session["User" + currid] as user; 

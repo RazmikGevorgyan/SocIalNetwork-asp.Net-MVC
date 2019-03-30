@@ -35,7 +35,7 @@ namespace Soc.Controllers
             string password = log.password;
             passwordHash hash = new passwordHash();
             List<user> auth = new List<user>();
-            auth =await (from item in context.users where item.login == login  select item).ToListAsync();
+            auth =(from item in context.users where item.login == login  select item).ToList();
             if (auth.Count == 0 || hash.Validate(password, auth[0].password) == false)
             {
                 if (auth[0] != null)
@@ -182,9 +182,9 @@ namespace Soc.Controllers
                     Session["token"] = null;
                 }
                 usr.email = valid.Email;
-                List<user> users =await (from item in context.users where 
+                List<user> users = (from item in context.users where 
                                     item.email == valid.Email && item.from_facebook != 1
-                                    select item).ToListAsync();
+                                    select item).ToList();
                 if (users.Count > 0)
                 {
                     ViewBag.error = "there is already have user with that Email";

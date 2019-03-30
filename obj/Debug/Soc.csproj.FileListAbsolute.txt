@@ -73,3 +73,7 @@ C:\Users\User\Desktop\Soc\Soc\bin\Microsoft.Owin.Host.SystemWeb.xml
 C:\Users\User\Desktop\Soc\Soc\obj\Debug\Soc.csprojAssemblyReference.cache
 C:\Users\User\Desktop\Soc\Soc\obj\Debug\Soc.csproj.CoreCompileInputs.cache
 C:\Users\User\Desktop\Soc\Soc\obj\Debug\Soc.csproj.CopyComplete
+C:\Users\User\Desktop\Soc\Soc\bin\Microsoft.AspNet.TelemetryCorrelation.dll
+C:\Users\User\Desktop\Soc\Soc\bin\System.Diagnostics.DiagnosticSource.dll
+C:\Users\User\Desktop\Soc\Soc\bin\Microsoft.AspNet.TelemetryCorrelation.xml
+C:\Users\User\Desktop\Soc\Soc\bin\System.Diagnostics.DiagnosticSource.xml
