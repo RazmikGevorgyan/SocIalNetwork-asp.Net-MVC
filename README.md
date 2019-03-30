@@ -1,4 +1,6 @@
 # SocIalNetwork-asp.Net-MVC
+##This is Social Network project with many features 
+
 1. Registration and Login process
 
 2. Members Listing.
@@ -27,10 +29,9 @@
 
 Basic feature for Admin \
 
-Able to see the listing of members and can manage. \
-Able to manage the groups, events etc. \ 
-Able to get feedback’s of users. \
-Able to make any photo or post as spam or can remove it. \
+1. Able to see the listing of members and can manage. 
+2. Able to get feedback’s of users. 
+3. Able to make any photo or post as spam or can remove it. 
 ![Webp net-gifmaker (1)](https://user-images.githubusercontent.com/48706091/55281654-e53d4e00-5350-11e9-8cbc-351b95882381.gif)
 
 
