@@ -1,3 +1,6 @@
 # SocIalNetwork-asp.Net-MVC
-###Social Network Database Diagrame ###
-![Screenshot (45)](https://user-images.githubusercontent.com/48706091/55277441-b1930180-5319-11e9-829d-17186f5f3821.png)
+#Social Network Database Diagram
+.bak file within project
+you can restore with Mangment studio 
+![Screenshot (46)](https://user-images.githubusercontent.com/48706091/55277523-a9879180-531a-11e9-94bf-32e64ac55f07.png)
+
