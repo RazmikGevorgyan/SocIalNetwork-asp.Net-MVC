@@ -19,7 +19,7 @@ namespace Soc.Controllers
             this.db =new socialEntities();
         }
         // GET: Admin
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
             string id;
             if (TempData["id"]!=null)
@@ -135,14 +135,16 @@ namespace Soc.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public async void AddAdv(string id)
+        public void AddAdv(string id)
         {
             int advId = int.Parse(id);
             string src = Request.Params["src"].ToString();
             string cost = Request.Params["cost"].ToString();
             string url = Request.Params["url"].ToString();
-            url = url.Replace("/,/Admin/AddAdv/1", "");
-            List<advert> ads =await (from item in db.adverts where item.advNo == advId && item.status == 1 select item).ToListAsync();
+            url = url.Replace(",/Admin/AddAdv/1", "");
+            url = url.Replace(",/Admin/AddAdv/2", "");
+            url = url.Replace(",/Admin/AddAdv/3", "");
+            List<advert> ads = (from item in db.adverts where item.advNo == advId && item.status == 1 select item).ToList();
             if (ads.Count != 0)
             {
                 var adv = new advert { id = ads[0].id, advert1 = src,cost=int.Parse(cost),datetime=DateTime.Now,url=url};
